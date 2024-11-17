@@ -43,7 +43,7 @@ const deleteCarousel = async (req, res) => {
         if (!deletedCarousel) {
             return res.status(404).json({ success: false, message: 'Carousel not found' });
         }
-
+//done
         return res.status(200).json({ success: true, message: 'Carousel deleted successfully' });
     } catch (error) {
         console.error('Error deleting carousel:', error);
