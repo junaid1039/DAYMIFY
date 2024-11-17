@@ -91,3 +91,23 @@ h2, h3 {
 .button:hover {
   background-color: black;
 }
+
+@media print {
+  .status-update {
+    display: none; /* Hide the order status update section */
+  }
+  .print-section {
+    display: none; /* Hide the print button */
+  }
+  .close-btn {
+    display: none; /* Optionally hide the close button on print */
+  }
+  .status{
+    display: none;
+  }
+  /* Optionally adjust other styles for print, e.g., font size */
+  body {
+    font-size: 12px; /* Reduce font size for printing */
+  }
+}
+

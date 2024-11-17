@@ -1,17 +1,16 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './orderdetails.css';
 import { RxCross2 } from "react-icons/rx";
 import { Context } from '../../context API/Contextapi';
 
 const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
-
   const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
-  const {countryCode} = useContext(Context);
-  const [orderDetails, setOrderDetails] = useState(null); // State to hold order details
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [orderStatus, setOrderStatus] = useState(''); // State for order status
+  const { countryCode } = useContext(Context);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderStatus, setOrderStatus] = useState('');
 
   // Function to update order status
   const updateOrderStatus = async () => {
@@ -22,7 +21,7 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
           'auth-token': `${sessionStorage.getItem('auth-token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: orderStatus }), // Send the updated status
+        body: JSON.stringify({ status: orderStatus }),
       });
 
       if (!response.ok) {
@@ -31,8 +30,8 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
 
       const updatedData = await response.json();
       if (updatedData.success) {
-        onStatusUpdate(); // Trigger the refresh function
-        onClose(); // Close the details modal
+        onStatusUpdate();
+        onClose();
       }
     } catch (error) {
       setError('Error updating order status: ' + error.message);
@@ -53,8 +52,8 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            setOrderDetails(data.order); // Assuming the order is directly returned
-            setOrderStatus(data.order.orderStatus); // Set the initial status
+            setOrderDetails(data.order);
+            setOrderStatus(data.order.orderStatus);
           } else {
             setError('Failed to fetch order details');
           }
@@ -76,19 +75,23 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
   };
 
   const handleUpdateClick = () => {
-    updateOrderStatus(); // Call update function on button click
+    updateOrderStatus();
+  };
+
+  const handlePrintClick = () => {
+    window.print(); // Trigger print dialog
   };
 
   if (loading) {
-    return <p>Loading order details...</p>; // Loading message
+    return <p>Loading order details...</p>;
   }
 
   if (error) {
-    return <p className="error-message">{error}</p>; // Error message
+    return <p className="error-message">{error}</p>;
   }
 
   if (!orderDetails) {
-    return <p>No order details available.</p>; // Fallback for no order details
+    return <p>No order details available.</p>;
   }
 
   const {
@@ -98,16 +101,16 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
     orderItems,
     shippingInfo,
     paymentInfo,
-  } = orderDetails; // Destructure order details
-  // Get currency symbol based on country code
+  } = orderDetails;
+
   const currencySymbols = {
     US: '$',
     EU: '€',
     PK: '₨',
     GB: '£',
-    AE: 'د.إ'
-};
-const currencySymbol = currencySymbols[countryCode] || '$';
+    AE: 'د.إ',
+  };
+  const currencySymbol = currencySymbols[countryCode] || '$';
 
   return (
     <div className="container">
@@ -153,6 +156,10 @@ const currencySymbol = currencySymbols[countryCode] || '$';
           <option value="Cancelled">Cancelled</option>
         </select>
         <button className="button" onClick={handleUpdateClick}>Update</button>
+      </div>
+
+      <div className="print-section">
+        <button onClick={handlePrintClick} className="button print-btn">Print</button>
       </div>
     </div>
   );
