@@ -105,6 +105,9 @@ h2, h3 {
   .status{
     display: none;
   }
+  .order-info p:last-child {
+    display: none;
+  }
   /* Optionally adjust other styles for print, e.g., font size */
   body {
     font-size: 12px; /* Reduce font size for printing */
