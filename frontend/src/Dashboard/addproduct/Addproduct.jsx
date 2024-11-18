@@ -22,6 +22,7 @@ const Addproduct = () => {
         sizes: [],
         visible: false
     });
+    const [tempColor, setTempColor] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -47,11 +48,23 @@ const Addproduct = () => {
         }));
     };
 
-    const arrayHandler = (e, fieldName) => {
-        setProductDetails({
-            ...productDetails,
-            [fieldName]: e.target.value.split(',').map(item => item.trim())
-        });
+    const arrayHandler = (e, field) => {
+        const value = e.target.value.split(',').map(item => item.trim()); // Split by commas and trim spaces
+        setProductDetails(prevDetails => ({
+            ...prevDetails,
+            [field]: value
+        }));
+    };
+
+
+    const addColor = () => {
+        if (tempColor) {
+            setProductDetails(prevDetails => ({
+                ...prevDetails,
+                colors: [...prevDetails.colors, tempColor]
+            }));
+            setTempColor(""); // Reset the temporary color
+        }
     };
 
     const imageHandler = (e) => {
@@ -62,7 +75,6 @@ const Addproduct = () => {
         setLoading(true);
         setErrorMessage("");
 
-        // Validate required fields
         if (!productDetails.name || !productDetails.category || !productDetails.description || images.length === 0) {
             setErrorMessage("Please fill in all required fields and upload at least one image.");
             setLoading(false);
@@ -74,10 +86,9 @@ const Addproduct = () => {
             formData.append('images', image);
         });
 
-        // Create the product object
         const product = {
             ...productDetails,
-            images: [] // Placeholder for image URLs after upload
+            images: []
         };
 
         Object.entries(product).forEach(([key, value]) => {
@@ -85,7 +96,6 @@ const Addproduct = () => {
         });
 
         try {
-            // Upload images
             const uploadResponse = await fetch(`${baseurl}/uploadimage`, {
                 method: 'POST',
                 body: formData,
@@ -93,9 +103,7 @@ const Addproduct = () => {
             const uploadData = await uploadResponse.json();
 
             if (uploadData.success) {
-                product.images = uploadData.data.map(img => img.secure_url); // Assign the uploaded image URLs
-                
-                // Now send the product data to add it to the database
+                product.images = uploadData.data.map(img => img.secure_url);
                 const addProductResponse = await fetch(`${baseurl}/addproduct`, {
                     method: 'POST',
                     headers: {
@@ -129,50 +137,50 @@ const Addproduct = () => {
         <div className="add-product">
             <div className="addproduct-itemfield">
                 <label>Product Title</label>
-                <input 
-                    value={productDetails.name} 
-                    onChange={changeHandler} 
-                    type="text" 
-                    name='name' 
-                    placeholder='Type here' 
+                <input
+                    value={productDetails.name}
+                    onChange={changeHandler}
+                    type="text"
+                    name='name'
+                    placeholder='Type here'
                 />
             </div>
             <div className="addproduct-price">
                 {['USD', 'EUR', 'PKR', 'GBP', 'AED'].map(currency => (
                     <div className="addproduct-itemfield" key={currency}>
                         <label>{currency} - Old Price</label>
-                        <input 
-                            value={productDetails.prices[currency].oldprice} 
-                            onChange={(e) => pricesChangeHandler(e, currency, 'oldprice')} 
-                            type="text" 
-                            placeholder={`Old price in ${currency}`} 
+                        <input
+                            value={productDetails.prices[currency].oldprice}
+                            onChange={(e) => pricesChangeHandler(e, currency, 'oldprice')}
+                            type="text"
+                            placeholder={`Old price in ${currency}`}
                         />
                         <label>{currency} - New Price</label>
-                        <input 
-                            value={productDetails.prices[currency].newprice} 
-                            onChange={(e) => pricesChangeHandler(e, currency, 'newprice')} 
-                            type="text" 
-                            placeholder={`New price in ${currency}`} 
+                        <input
+                            value={productDetails.prices[currency].newprice}
+                            onChange={(e) => pricesChangeHandler(e, currency, 'newprice')}
+                            type="text"
+                            placeholder={`New price in ${currency}`}
                         />
                     </div>
                 ))}
             </div>
             <div className="addproduct-itemfield">
                 <label>Description</label>
-                <textarea 
-                    rows={5} 
-                    value={productDetails.description} 
-                    onChange={changeHandler} 
-                    name="description" 
-                    placeholder='Description' 
+                <textarea
+                    rows={5}
+                    value={productDetails.description}
+                    onChange={changeHandler}
+                    name="description"
+                    placeholder='Description'
                 />
             </div>
             <div className="addproduct-itemfield">
                 <label>Product Category</label>
-                <select 
-                    value={productDetails.category} 
-                    onChange={changeHandler} 
-                    name='category' 
+                <select
+                    value={productDetails.category}
+                    onChange={changeHandler}
+                    name='category'
                     className='add-product-selector'
                 >
                     <option value='men shoes'>Men Shoes</option>
@@ -191,22 +199,33 @@ const Addproduct = () => {
             <div className="addproduct-row">
                 <div className="addproduct-itemfield">
                     <label>Brand</label>
-                    <input 
-                        value={productDetails.brand} 
-                        onChange={changeHandler} 
-                        type="text" 
-                        name='brand' 
-                        placeholder='Brand' 
+                    <input
+                        value={productDetails.brand}
+                        onChange={changeHandler}
+                        type="text"
+                        name='brand'
+                        placeholder='Brand'
                     />
                 </div>
                 <div className="addproduct-itemfield">
-                    <label>Colors (comma-separated)</label>
-                    <input 
-                        value={productDetails.colors.join(', ')} 
-                        onChange={(e) => arrayHandler(e, 'colors')} 
-                        type="text" 
-                        placeholder='e.g., red, blue, green' 
-                    />
+                    <label>Colors</label>
+                    <div className="color-picker-wrapper">
+                        {productDetails.colors.map((color, index) => (
+                            <div key={index} className="color-preview" style={{ backgroundColor: color }} />
+                        ))}
+                        <input
+                            type="color"
+                            value={tempColor}
+                            onChange={(e) => setTempColor(e.target.value)}
+                        />
+                        <button
+                            className="color-ok-btn"
+                            onClick={addColor}
+                            disabled={!tempColor}
+                        >
+                            OK
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -214,24 +233,25 @@ const Addproduct = () => {
             <div className="addproduct-row2">
                 <div className="addproduct-itemfield2">
                     <label>Visibility</label>
-                    <input 
-                        type="checkbox" 
-                        name="visible" 
-                        checked={productDetails.visible} 
-                        onChange={changeHandler} 
+                    <input
+                        type="checkbox"
+                        name="visible"
+                        checked={productDetails.visible}
+                        onChange={changeHandler}
                     />
                 </div>
             </div>
 
             <div className="addproduct-itemfield">
                 <label>Sizes (comma-separated)</label>
-                <input 
-                    value={productDetails.sizes.join(', ')} 
-                    onChange={(e) => arrayHandler(e, 'sizes')} 
-                    type="text" 
-                    placeholder='e.g., S, M, L' 
+                <input
+                    value={productDetails.sizes.join(', ')}
+                    onChange={(e) => arrayHandler(e, 'sizes')}
+                    type="text"
+                    placeholder='e.g., S, M, L'
                 />
             </div>
+
 
             <div className="addproduct-itemfield">
                 <div className="image-previews">
