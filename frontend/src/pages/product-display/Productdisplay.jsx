@@ -20,7 +20,7 @@ const Productdisplay = ({ product }) => {
     const [mainImage, setMainImage] = useState(product.images?.[0] || product.image);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);  // State to prevent double clicks
+    const [isProcessing, setIsProcessing] = useState(false); // State to prevent double clicks
     const { addToCart } = useContext(Context);
     const navigate = useNavigate();
 
@@ -32,12 +32,15 @@ const Productdisplay = ({ product }) => {
         if (isProcessing) return;
         setIsProcessing(true);
 
-        if ((product.sizes && !selectedSize) || (product.colors && !selectedColor)) {
+        // Check if sizes or colors are required
+        if ((product.sizes?.length > 0 && !selectedSize) || (product.colors?.length > 0 && !selectedColor)) {
             alert("Please select both a size and a color.");
             setIsProcessing(false);
             return;
         }
-        addToCart(product.id, selectedColor, selectedSize);
+
+        // Add to cart with or without size/color
+        addToCart(product.id, selectedColor || null, selectedSize || null);
         setTimeout(() => {
             setIsProcessing(false); // Reset after processing
         }, 300); // Adjust timeout if necessary
@@ -47,13 +50,15 @@ const Productdisplay = ({ product }) => {
         if (isProcessing) return;
         setIsProcessing(true);
 
-        if ((product.sizes && !selectedSize) || (product.colors && !selectedColor)) {
+        // Check if sizes or colors are required
+        if ((product.sizes?.length > 0 && !selectedSize) || (product.colors?.length > 0 && !selectedColor)) {
             alert("Please select both a size and a color.");
             setIsProcessing(false);
             return;
         }
 
-        addToCart(product.id, selectedColor, selectedSize);
+        // Add to cart and navigate to checkout
+        addToCart(product.id, selectedColor || null, selectedSize || null);
         navigate('/cart/checkout');
 
         setTimeout(() => {
