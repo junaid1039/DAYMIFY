@@ -16,7 +16,7 @@ const Footer = React.memo(() => {
           <div className="f-left">
             <h5>Customer Service</h5>
             <p>Monday to Friday: 9am - 9pm EST, Saturday: 10am - 9pm EST</p>
-            <a href="tel:your-phone-number">+923021725822</a>
+            <a href="tel:your-phone-number">+923072571086</a>
             <label onClick={() => navigate('/contactus')}>Contact us</label>
           </div>
           <div className="f-middle">
@@ -27,10 +27,10 @@ const Footer = React.memo(() => {
           <div className="f-right">
             <h5>Follow us</h5>
             <div className="social">
-              <FaFacebookF />
-              <FaInstagram />
-              <FaXTwitter />
-              <TfiYoutube />
+                <a href="https://www.facebook.com" target="_blank"><FaFacebookF /></a>
+                <a href="https://www.instagram.com" target="_blank"><FaInstagram /></a>
+                <a href="https://www.twitter.com" target="_blank"><FaXTwitter /></a>
+                <a href="https://www.youtube.com" target="_blank"><TfiYoutube /></a>
             </div>
           </div>
         </div>
