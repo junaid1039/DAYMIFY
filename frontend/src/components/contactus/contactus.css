@@ -47,7 +47,7 @@ form {
     box-sizing: border-box; /* Ensure padding is included in width */
 }
 
-button {
+.contact-s-btn {
     margin-top: 20px;
     padding: 10px;
     border: none;
@@ -59,6 +59,6 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.contact-s-btn:hover {
     background-color: #218838;
 }
