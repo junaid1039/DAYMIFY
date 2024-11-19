@@ -24,9 +24,6 @@ router.get('/allCode', getAllPromoCodes);
 //delete code
 router.delete('/delcode', deletePromoCode);
 
-
-
-
 //popup Routes
 router.post('/createpopup', auth, PopupController.createPopup);
 router.get('/allpopups', PopupController.getAllPopups);
