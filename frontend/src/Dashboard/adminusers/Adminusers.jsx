@@ -191,6 +191,7 @@ const AdminUsers = () => {
                     <select name="role" value={editUser.role} onChange={handleInputChange}>
                         <option value="User">User</option>
                         <option value="Admin">Admin</option>
+                        <option value="Editor">Editor</option>
                     </select>
                     <button onClick={handleSaveClick} className="save-button">
                         <TiTickOutline /> Save

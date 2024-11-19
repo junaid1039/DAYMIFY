@@ -11,7 +11,7 @@ const PrivateRoute = ({ element: Element, requiredRole }) => {
     return <Navigate to="/account" replace />;
   }
 
-  if (userRole !== 'Admin') {
+  if (userRole !== 'Admin' && userRole !== 'Owner') {
     // If role doesn't match, redirect to unauthorized or some other page
     return <Navigate to="/unauthorized" replace />;
   }

@@ -15,7 +15,7 @@ const auth = (req, res, next) => {
         req.user = decoded; // Attach user data to the request object
 
         // Check if the user's role is either admin or owner
-        const allowedRoles = [process.env.ROLE, 'owner']; // Use admin from environment variable and explicitly allow owner
+        const allowedRoles = [process.env.ROLE, 'Owner']; // Use admin from environment variable and explicitly allow owner
         if (!allowedRoles.includes(req.user.role)) {
             return res.status(403).json({ 
                 success: false, 
