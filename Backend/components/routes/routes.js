@@ -6,7 +6,7 @@ const userController = require('../controllers/userControllers');
 const cartController = require('../controllers/cartControllers');
 const orderController = require('../controllers/orderControllers');
 const {uploadImages, uploadCarousel} = require('../controllers/imageControllers') // Image controller for upload
-const { auth, userauth } = require('../middleware/auth'); // Middleware for authenticating users
+const { auth, userauth, multiAuth } = require('../middleware/auth'); // Middleware for authenticating users
 const carouselController  = require('../controllers/carouselController');
 const {createQuery, getQueries,updateQuery,deleteQuery} = require('../controllers/userquoryController')
 const PopupController = require('../controllers/popupControllers');
@@ -56,11 +56,11 @@ router.post('/uploadimage', upload.array('images', 5), uploadImages); // Handles
 router.get('/productdata/:id', productController.getProductById);
 
 // Product routes
-router.put('/product/:id', auth,  productController.editProduct); 
-router.post('/addproduct',auth, productController.addProduct); // Adds a new product
+router.put('/product/:id', multiAuth,  productController.editProduct); 
+router.post('/addproduct',multiAuth, productController.addProduct); // Adds a new product
 router.post('/removeproduct', auth, productController.removeProduct); // Removes a product
 router.get('/allproducts', productController.userAllProducts); // Fetches all visible products
-router.get('/adminproducts', auth, productController.adminAllProducts);// fetch all products
+router.get('/adminproducts', multiAuth, productController.adminAllProducts);// fetch all products
 router.get('/subcategorys', productController.subcategorys); // Fetches all subcategories
 
 //verify Token
