@@ -4,6 +4,7 @@ import { IoMdCloudUpload } from "react-icons/io";
 
 const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
+
 const Addproduct = () => {
     const [images, setImages] = useState([]);
     const [productDetails, setProductDetails] = useState({
