@@ -47,7 +47,6 @@ const Addproduct = () => {
             }
         }));
     };
-
     const arrayHandler = (e, field) => {
         const value = e.target.value.split(',').map(item => item.trim()); // Split by commas and trim spaces
         setProductDetails(prevDetails => ({
@@ -66,7 +65,6 @@ const Addproduct = () => {
             setTempColor(""); // Reset the temporary color
         }
     };
-
     const imageHandler = (e) => {
         setImages(Array.from(e.target.files));
     };
@@ -113,7 +111,6 @@ const Addproduct = () => {
                     },
                     body: JSON.stringify(product),
                 });
-
                 const data = await addProductResponse.json();
 
                 if (data.success) {
