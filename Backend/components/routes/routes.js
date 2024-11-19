@@ -16,13 +16,13 @@ const upload = require('../middleware/multer')
 
 
 //promo Code Routes
-router.post('/createCode',auth, createPromoCode);
+router.post('/createCode',createPromoCode);
 // Route to validate a promo code
 router.post('/validateCode', validatePromoCode);
 // Route to fetch all active promo codes (for admin use)
 router.get('/allCode', getAllPromoCodes);
 //delete code
-router.delete('/delcode', auth, deletePromoCode);
+router.delete('/delcode', deletePromoCode);
 
 
 
