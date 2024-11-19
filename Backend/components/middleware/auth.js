@@ -14,18 +14,26 @@ const auth = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         req.user = decoded; // Attach user data to the request object
 
-        // Check if the user's role matches the required role
-        if (req.user.role !== process.env.ROLE) {
-            return res.status(403).json({ success: false, message: 'Access denied. Insufficient privileges.' });
+        // Check if the user's role is either admin or owner
+        const allowedRoles = [process.env.ROLE, 'owner']; // Use admin from environment variable and explicitly allow owner
+        if (!allowedRoles.includes(req.user.role)) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Access denied. Insufficient privileges.' 
+            });
         }
-
 
         next(); // User is authorized
     } catch (error) {
         // Provide more context in the error response
-        res.status(400).json({ success: false, message: 'Invalid token', error: error.message });
+        res.status(400).json({ 
+            success: false, 
+            message: 'Invalid token', 
+            error: error.message 
+        });
     }
 };
+
 
 const userauth = (req, res, next) => {
     const token = req.header('auth-token');

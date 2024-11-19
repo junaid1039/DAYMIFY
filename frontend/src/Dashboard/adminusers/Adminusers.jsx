@@ -19,28 +19,36 @@ const AdminUsers = () => {
     // Fetch users from backend
     useEffect(() => {
         const loadUsers = async () => {
-            setLoading(true); // Set loading state
+            setLoading(true);
             try {
-                const userData = await fetchUsers(); // Await the fetchUsers call
-                setUsers(userData); // Set users state with the returned data
+                const userData = await fetchUsers();
+                setUsers(userData);
             } catch (err) {
-                setError('Failed to fetch users'); // Handle fetch error
+                setError('Failed to fetch users');
             } finally {
-                setLoading(false); // Reset loading state
+                setLoading(false);
             }
         };
 
-        loadUsers(); // Call the async function
+        loadUsers();
     }, [fetchUsers]);
 
     // Edit function
     const handleEditClick = useCallback((user) => {
+        if (user.role === "Owner") {
+            alert("You cannot edit the role or details of an owner.");
+            return;
+        }
         setEditingUserId(user._id);
         setEditUser({ name: user.name, email: user.email, role: user.role });
     }, []);
 
     // Delete function
-    const handleDeleteClick = useCallback((id) => {
+    const handleDeleteClick = useCallback((id, role) => {
+        if (role === "Owner") {
+            alert("You cannot delete an owner.");
+            return;
+        }
         setConfirmDeleteId(id);
     }, []);
 
@@ -56,7 +64,7 @@ const AdminUsers = () => {
             });
             const data = await res.json();
             if (data.success) {
-                setUsers((prevUsers) => prevUsers.filter(user => user._id !== confirmDeleteId)); // Update users state
+                setUsers((prevUsers) => prevUsers.filter(user => user._id !== confirmDeleteId));
             } else {
                 console.error('Error deleting user:', data.message);
             }
@@ -64,7 +72,7 @@ const AdminUsers = () => {
         } catch (error) {
             console.error('Error deleting user:', error);
         }
-    }, [baseurl, confirmDeleteId]); // Ensure baseurl and confirmDeleteId are dependencies
+    }, [baseurl, confirmDeleteId]);
 
     const cancelDelete = useCallback(() => {
         setConfirmDeleteId(null);
@@ -88,7 +96,7 @@ const AdminUsers = () => {
             });
             const data = await res.json();
             if (data.success) {
-                setUsers((prevUsers) => prevUsers.map(user => user._id === editingUserId ? data.user : user)); // Update users state
+                setUsers((prevUsers) => prevUsers.map(user => user._id === editingUserId ? data.user : user));
                 setEditingUserId(null);
             } else {
                 console.error('Error updating user:', data.message);
@@ -132,10 +140,18 @@ const AdminUsers = () => {
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>
-                                <button onClick={() => handleEditClick(user)} className="o-db">
+                                <button
+                                    onClick={() => handleEditClick(user)}
+                                    className={`o-db ${user.role === "Owner" ? "disabled" : ""}`}
+                                    disabled={user.role === "Owner"}
+                                >
                                     <LuPencilLine />
                                 </button>
-                                <button onClick={() => handleDeleteClick(user._id)} className="o-db">
+                                <button
+                                    onClick={() => handleDeleteClick(user._id, user.role)}
+                                    className={`o-db ${user.role === "Owner" ? "disabled" : ""}`}
+                                    disabled={user.role === "Owner"}
+                                >
                                     <RiDeleteBin6Line />
                                 </button>
                             </td>
@@ -189,3 +205,4 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
+

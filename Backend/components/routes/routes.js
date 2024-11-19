@@ -16,24 +16,24 @@ const upload = require('../middleware/multer')
 
 
 //promo Code Routes
-router.post('/createCode', createPromoCode);
+router.post('/createCode',auth, createPromoCode);
 // Route to validate a promo code
 router.post('/validateCode', validatePromoCode);
 // Route to fetch all active promo codes (for admin use)
 router.get('/allCode', getAllPromoCodes);
 //delete code
-router.delete('/delcode', deletePromoCode);
+router.delete('/delcode', auth, deletePromoCode);
 
 
 
 
 //popup Routes
-router.post('/createpopup', PopupController.createPopup);
+router.post('/createpopup', auth, PopupController.createPopup);
 router.get('/allpopups', PopupController.getAllPopups);
 router.get('/active', PopupController.getActivePopups);
 router.get('/getbyid/:id', PopupController.getPopupById);
 router.put('/update/:id', PopupController.updatePopup);
-router.delete('/del/:id', PopupController.deletePopup);
+router.delete('/del/:id', auth, PopupController.deletePopup);
 
 
 // Define the routes for quories
