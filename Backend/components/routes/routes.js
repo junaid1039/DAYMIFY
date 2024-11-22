@@ -25,12 +25,12 @@ router.get('/allCode', getAllPromoCodes);
 router.delete('/delcode', deletePromoCode);
 
 //popup Routes
-router.post('/createpopup', auth, PopupController.createPopup);
+router.post('/createpopup',PopupController.createPopup);
 router.get('/allpopups', PopupController.getAllPopups);
 router.get('/active', PopupController.getActivePopups);
 router.get('/getbyid/:id', PopupController.getPopupById);
 router.put('/update/:id', PopupController.updatePopup);
-router.delete('/del/:id', auth, PopupController.deletePopup);
+router.delete('/del/:id', PopupController.deletePopup);
 
 
 // Define the routes for quories
