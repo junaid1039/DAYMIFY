@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './footer.css';
 import logo from '../../assets/logo.png';
-import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
+import { FaFacebookF, FaInstagram, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { TfiYoutube} from 'react-icons/tfi';
 
 const Footer = React.memo(() => {
@@ -31,6 +31,7 @@ const Footer = React.memo(() => {
                 <a href="https://www.instagram.com" target="_blank"><FaInstagram /></a>
                 <a href="https://www.twitter.com" target="_blank"><FaXTwitter /></a>
                 <a href="https://www.youtube.com" target="_blank"><TfiYoutube /></a>
+              <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp"><FaWhatsapp />
             </div>
           </div>
         </div>
