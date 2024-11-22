@@ -16,6 +16,7 @@ export const App = () => {
         {/* User layout for all user-related routes */}
         <Route path="/*" element={<UserLayout />} />
 
+        
         {/* Protected Admin layout for admin-related routes */}
         <Route 
           path="/admin/*" 
