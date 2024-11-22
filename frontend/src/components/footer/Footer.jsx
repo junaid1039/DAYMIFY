@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './footer.css';
 import logo from '../../assets/logo.png';
 import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
-import { TfiYoutube } from 'react-icons/tfi';
+import { TfiYoutube, FaWhatsapp} from 'react-icons/tfi';
 
 const Footer = React.memo(() => {
   const year = new Date().getFullYear();
