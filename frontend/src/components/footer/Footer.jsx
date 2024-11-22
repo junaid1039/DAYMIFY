@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './footer.css';
 import logo from '../../assets/logo.png';
 import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
-import { TfiYoutube, FaWhatsapp } from 'react-icons/tfi';
+import { TfiYoutube} from 'react-icons/tfi';
 
 const Footer = React.memo(() => {
   const year = new Date().getFullYear();
@@ -27,21 +27,11 @@ const Footer = React.memo(() => {
           <div className="f-right">
             <h5>Follow us</h5>
             <div className="social">
-              <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                <FaFacebookF />
-              </a>
-              <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                <FaInstagram />
-              </a>
-              <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
-                <FaXTwitter />
-              </a>
-              <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
-                <TfiYoutube />
-              </a>
-              <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
-                <FaWhatsapp />
-              </a>
+                <a href="https://www.facebook.com" target="_blank"><FaFacebookF /></a>
+                <a href="https://www.instagram.com" target="_blank"><FaInstagram /></a>
+                <a href="https://www.twitter.com" target="_blank"><FaXTwitter /></a>
+                <a href="https://www.youtube.com" target="_blank"><TfiYoutube /></a>
+                
             </div>
           </div>
         </div>
