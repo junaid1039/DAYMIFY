@@ -55,7 +55,7 @@ router.get('/productdata/:id', productController.getProductById);
 // Product routes
 router.put('/product/:id', multiAuth,  productController.editProduct); 
 router.post('/addproduct',multiAuth, productController.addProduct); // Adds a new product
-router.post('/removeproduct', auth, productController.removeProduct); // Removes a product
+router.post('/removeproduct', multiAuth, productController.removeProduct); // Removes a product
 router.get('/allproducts', productController.userAllProducts); // Fetches all visible products
 router.get('/adminproducts', multiAuth, productController.adminAllProducts);// fetch all products
 router.get('/subcategorys', productController.subcategorys); // Fetches all subcategories

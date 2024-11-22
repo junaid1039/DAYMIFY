@@ -11,9 +11,6 @@ import { IoMdNotifications } from "react-icons/io";
 import { AiOutlineMessage } from "react-icons/ai";
 import { RiDiscountPercentLine } from "react-icons/ri";
 
-
-
-
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,47 +18,36 @@ const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
+  // Get the user role from the token
+  const token = sessionStorage.getItem('auth-token');
+  const userRole = token ? JSON.parse(atob(token.split('.')[1])).role : null; // Decode JWT and get the role
+
+  // Sidebar items
+  const sidebarItems = [
+    { path: "/admin", label: "Dashboard", icon: <LuLayoutDashboard />, roles: ['Admin', 'Owner'] },
+    { path: "addproduct", label: "Add New Product", icon: <CiShoppingCart />, roles: ['Admin', 'Owner', 'Editor'] },
+    { path: "productlist", label: "Manage Products", icon: <CiBoxList />, roles: ['Admin', 'Owner', 'Editor'] },
+    { path: "orders", label: "View Orders", icon: <MdOutlineVerified />, roles: ['Admin', 'Owner'] },
+    { path: "users", label: "Manage Users", icon: <LiaUserSolid />, roles: ['Admin', 'Owner'] },
+    { path: "carousel", label: "Manage Carousel", icon: <BiCarousel />, roles: ['Admin', 'Owner'] },
+    { path: "queries", label: "Manage Queries", icon: <AiOutlineMessage />, roles: ['Admin', 'Owner'] },
+    { path: "popup", label: "Popups", icon: <IoMdNotifications />, roles: ['Admin', 'Owner'] },
+    { path: "promocode", label: "Promo Codes", icon: <RiDiscountPercentLine />, roles: ['Admin', 'Owner'] },
+  ];
+
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar_toggle" onClick={toggleSidebar}>
         <FiMenu />
       </div>
-      <Link to="/admin" className="sidebar_item" aria-label="Dashboard">
-        <LuLayoutDashboard />
-        <p>Dashboard</p>
-      </Link>
-      <Link to="addproduct" className="sidebar_item" aria-label="Add Product">
-        <CiShoppingCart />
-        <p>Add New Product</p>
-      </Link>
-      <Link to="productlist" className="sidebar_item" aria-label="Product List">
-        <CiBoxList />
-        <p>Manage Products</p>
-      </Link>
-      <Link to="orders" className="sidebar_item" aria-label="Orders">
-        <MdOutlineVerified />
-        <p>View Orders</p>
-      </Link>
-      <Link to="users" className="sidebar_item" aria-label="Users">
-        <LiaUserSolid />
-        <p>Manage Users</p>
-      </Link>
-      <Link to="carousel" className="sidebar_item" aria-label="Users">
-        <BiCarousel />
-        <p>Manage Carousel</p>
-      </Link>
-      <Link to="queries" className="sidebar_item" aria-label="Users">
-        <AiOutlineMessage />
-        <p>Manage Queries</p>
-      </Link>
-      <Link to="popup" className="sidebar_item" aria-label="Users">
-        <IoMdNotifications />
-        <p>Popups</p>
-      </Link>
-      <Link to="promocode" className="sidebar_item" aria-label="Users">
-        <RiDiscountPercentLine />
-        <p>Promo Codes</p>
-      </Link>
+      {sidebarItems
+        .filter(item => item.roles.includes(userRole)) // Filter items based on the user role
+        .map((item, index) => (
+          <Link to={item.path} className="sidebar_item" key={index} aria-label={item.label}>
+            {item.icon}
+            <p>{item.label}</p>
+          </Link>
+        ))}
     </div>
   );
 };
