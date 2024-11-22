@@ -14,6 +14,7 @@ const addToCart = async (req, res) => {
                 item.size === size
         );
 
+        
         if (itemIndex > -1) {
             // If the item exists, increase the quantity
             userdata.cartData[itemIndex].quantity += quantity;
