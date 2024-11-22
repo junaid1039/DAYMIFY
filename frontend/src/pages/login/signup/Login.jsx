@@ -41,6 +41,12 @@ const Login = () => {
         }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleAuth();
+        }
+    };
+
     return (
         <div>
             {isLoading && <Loader />} {/* Full-screen loader */}
@@ -74,7 +80,11 @@ const Login = () => {
                 </>
             ) : (
                 <div className="login__auth-container">
-                    <div className="login__box">
+                    <div
+                        className="login__box"
+                        onKeyDown={handleKeyDown} // Add keydown event listener here
+                        tabIndex="0" // Make the div focusable to capture key events
+                    >
                         <h1>{state}</h1>
                         <div className="login__fields">
                             {state === "Sign Up" && (
