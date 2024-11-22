@@ -31,7 +31,6 @@ const Footer = React.memo(() => {
                 <a href="https://www.instagram.com" target="_blank"><FaInstagram /></a>
                 <a href="https://www.twitter.com" target="_blank"><FaXTwitter /></a>
                 <a href="https://www.youtube.com" target="_blank"><TfiYoutube /></a>
-                
             </div>
           </div>
         </div>
