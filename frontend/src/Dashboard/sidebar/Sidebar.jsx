@@ -27,11 +27,11 @@ const Sidebar = () => {
     { path: "/admin", label: "Dashboard", icon: <LuLayoutDashboard />, roles: ['Admin', 'Owner'] },
     { path: "addproduct", label: "Add New Product", icon: <CiShoppingCart />, roles: ['Admin', 'Owner', 'Editor'] },
     { path: "productlist", label: "Manage Products", icon: <CiBoxList />, roles: ['Admin', 'Owner', 'Editor'] },
-    { path: "orders", label: "View Orders", icon: <MdOutlineVerified />, roles: ['Admin', 'Owner'] },
+    { path: "orders", label: "View Orders", icon: <MdOutlineVerified />, roles: ['Admin', 'Owner', 'Editor'] },
     { path: "users", label: "Manage Users", icon: <LiaUserSolid />, roles: ['Admin', 'Owner'] },
-    { path: "carousel", label: "Manage Carousel", icon: <BiCarousel />, roles: ['Admin', 'Owner'] },
+    { path: "carousel", label: "Manage Carousel", icon: <BiCarousel />, roles: ['Admin', 'Owner', 'Editor'] },
     { path: "queries", label: "Manage Queries", icon: <AiOutlineMessage />, roles: ['Admin', 'Owner'] },
-    { path: "popup", label: "Popups", icon: <IoMdNotifications />, roles: ['Admin', 'Owner'] },
+    { path: "popup", label: "Popups", icon: <IoMdNotifications />, roles: ['Admin', 'Owner', "Editor"] },
     { path: "promocode", label: "Promo Codes", icon: <RiDiscountPercentLine />, roles: ['Admin', 'Owner'] },
   ];
 

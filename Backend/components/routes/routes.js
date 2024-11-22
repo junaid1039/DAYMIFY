@@ -41,10 +41,10 @@ router.put('/updatequory/:id', updateQuery); // Update a query by ID
 router.delete('/delquory/:id', deleteQuery); // Delete a query by ID
 
 //carousel routes
-router.post('/uploadcarousel',auth, upload.single('image'), uploadCarousel);
-router.post('/postcarousel', auth, carouselController.addCarousel);
+router.post('/uploadcarousel',multiAuth, upload.single('image'), uploadCarousel);
+router.post('/postcarousel', multiAuth, carouselController.addCarousel);
 router.get('/getcarousel', carouselController.getAllCarousels);
-router.delete('/delcarousel', auth, carouselController.deleteCarousel);
+router.delete('/delcarousel', multiAuth, carouselController.deleteCarousel);
 
 router.post('/uploadimage', upload.array('images', 5), uploadImages); // Handles multiple images
  // Handles multiple images
@@ -85,15 +85,15 @@ router.delete('/deleteuser/:id', auth, userController.deleteUser); // Deletes a 
 // Order Routes
 router.post('/confirmorder', userauth, orderController.newOrder); // Places an order
 //get all orders
-router.get('/allorders', auth, orderController.getAllOrders); // Retrieves all orders for a user
+router.get('/allorders', multiAuth, orderController.getAllOrders); // Retrieves all orders for a user
 //order details
-router.get('/orderdetails/:id', auth, orderController.getOrderDetails); // Retrieves order details
+router.get('/orderdetails/:id', multiAuth, orderController.getOrderDetails); // Retrieves order details
 //loged in user order details
 router.get('/myorders/:id', userauth, orderController.getMyOrders); // Retrieves order details for the user
 
-router.put('/updateOrderStatus/:id', auth, orderController.updateOrderStatus);  // Updates the status of an order
+router.put('/updateOrderStatus/:id', multiAuth, orderController.updateOrderStatus);  // Updates the status of an order
 
-router.delete('/delorder/:id', auth, orderController.deleteOrder); //delete orders
+router.delete('/delorder/:id', multiAuth, orderController.deleteOrder); //delete orders
 
 // Error handling middleware (for handling multer or any unknown errors)
 router.use((err, req, res, next) => {

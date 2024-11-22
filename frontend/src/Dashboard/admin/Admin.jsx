@@ -47,6 +47,9 @@ const Admin = () => {
           <Route path="addproduct" element={<Addproduct />} />
           <Route path="productlist" element={<Productlist />} />
           <Route path="productlist/editproduct/:id" element={<Editproduct />} />
+          <Route path="popup" element={<Adminpopup />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="carousel" element={<AdminCarousel />} />
         </>
       );
     } else {
