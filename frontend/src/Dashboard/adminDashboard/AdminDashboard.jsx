@@ -32,6 +32,7 @@ const AdminDashboard = () => {
     const [latestOrders, setLatestOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedPeriod, setSelectedPeriod] = useState('all'); // Default to all-time
 
     const fetchDashboardData = useCallback(async () => {
         setLoading(true);
@@ -52,7 +53,8 @@ const AdminDashboard = () => {
     const fetchDashboardStats = async (totalProducts) => {
         try {
             const [users, orders] = await Promise.all([fetchUsers(), fetchOrders()]); // Fetch users and orders concurrently
-            const totalSales = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+            
+            const totalSales = calculateSales(orders, selectedPeriod); // Calculate sales based on selected period
 
             setStats({
                 totalProducts,
@@ -64,6 +66,34 @@ const AdminDashboard = () => {
         } catch (err) {
             setError('Failed to load dashboard stats');
         }
+    };
+
+    const calculateSales = (orders, period) => {
+        const now = new Date();
+        let filteredOrders = orders;
+
+        switch (period) {
+            case 'today':
+                filteredOrders = orders.filter(order => new Date(order.dateOrdered).toDateString() === now.toDateString());
+                break;
+            case 'week':
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - now.getDay());
+                filteredOrders = orders.filter(order => new Date(order.dateOrdered) >= startOfWeek);
+                break;
+            case 'month':
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                filteredOrders = orders.filter(order => new Date(order.dateOrdered) >= startOfMonth);
+                break;
+            case 'year':
+                const startOfYear = new Date(now.getFullYear(), 0, 1);
+                filteredOrders = orders.filter(order => new Date(order.dateOrdered) >= startOfYear);
+                break;
+            default: // all time
+                break;
+        }
+
+        return filteredOrders.reduce((acc, order) => acc + order.totalPrice, 0);
     };
 
     const fetchOrdersChart = async () => {
@@ -105,8 +135,16 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        fetchDashboardData(); // Call the memoized function
+        fetchDashboardData(); // Initial fetch for dashboard data
     }, [fetchDashboardData]);
+
+    useEffect(() => {
+        fetchDashboardStats(stats.totalProducts); // Re-fetch when the selected period changes
+    }, [selectedPeriod, stats.totalProducts]); // Re-run on `selectedPeriod` change
+
+    const handlePeriodChange = (e) => {
+        setSelectedPeriod(e.target.value);
+    };
 
     if (loading) {
         return <Adminloader />;
@@ -146,6 +184,13 @@ const AdminDashboard = () => {
                     <div>
                         <p>Total Sales</p>
                         <h3>${stats.totalSales.toFixed(2)}</h3>
+                        <select className="sales-dropdown" value={selectedPeriod} onChange={handlePeriodChange}>
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
                     </div>
                 </div>
             </div>

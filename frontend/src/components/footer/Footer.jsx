@@ -4,6 +4,7 @@ import './footer.css';
 import logo from '../../assets/logo.png';
 import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
 import { TfiYoutube } from 'react-icons/tfi';
+import { Link } from 'react-router-dom';
 
 const Footer = React.memo(() => {
   const year = new Date().getFullYear();
