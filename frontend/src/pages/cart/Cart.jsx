@@ -126,7 +126,7 @@ const Cart = () => {
               <div className="sub-cs">
                 <h4>Customer Service</h4>
                 <div className="cntct">
-                  <p><FiPhone /> <a href="tel:+923021725822">+92302-1725822</a></p>
+                  <p><FiPhone /> <a href="tel:+923021725822">+92307-2571086</a></p>
                   <p>Monday to Friday: 9am to 9pm PST</p>
                 </div>
               </div>

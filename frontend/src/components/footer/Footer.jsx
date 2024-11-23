@@ -4,9 +4,6 @@ import './footer.css';
 import logo from '../../assets/logo.png';
 import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
 import { TfiYoutube } from 'react-icons/tfi';
-import {Link} from 'react-router-dom';
-import { FaWhatsapp } from "react-icons/fa";
-
 
 const Footer = React.memo(() => {
   const year = new Date().getFullYear();
@@ -34,7 +31,6 @@ const Footer = React.memo(() => {
                 <a href="https://www.instagram.com" target="_blank"><FaInstagram /></a>
                 <a href="https://www.twitter.com" target="_blank"><FaXTwitter /></a>
                 <a href="https://www.youtube.com" target="_blank"><TfiYoutube /></a>
-                <a href="https://www.whatsapp.com" target="_blank"><FaWhatsapp /></a>
             </div>
           </div>
         </div>
