@@ -11,6 +11,14 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState('');
+  const [shippingInfo, setShippingInfo] = useState({
+    address: '',
+    city: '',
+    state: '',
+    country: '',
+    postcode: '',
+    phone: '',
+  });
 
   // Function to update order status
   const updateOrderStatus = async () => {
@@ -38,6 +46,35 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
     }
   };
 
+  // Function to update shipping address
+  const updateShippingAddress = async () => {
+    try {
+      const response = await fetch(`${baseurl}/ordersadd/${oid}/address`, {
+        method: 'PUT',
+        headers: {
+          'auth-token': `${sessionStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shippingInfo }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update shipping address');
+      }
+
+      const updatedData = await response.json();
+      if (updatedData.success) {
+        setOrderDetails((prev) => ({
+          ...prev,
+          shippingInfo: updatedData.order.shippingInfo,
+        }));
+        alert('Shipping address updated successfully');
+      }
+    } catch (error) {
+      setError('Error updating shipping address: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -54,6 +91,7 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
           if (data.success) {
             setOrderDetails(data.order);
             setOrderStatus(data.order.orderStatus);
+            setShippingInfo(data.order.shippingInfo);
           } else {
             setError('Failed to fetch order details');
           }
@@ -70,12 +108,12 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
     fetchOrderDetails();
   }, [oid]);
 
-  const handleStatusChange = (event) => {
-    setOrderStatus(event.target.value);
-  };
-
-  const handleUpdateClick = () => {
-    updateOrderStatus();
+  const handleShippingInfoChange = (event) => {
+    const { name, value } = event.target;
+    setShippingInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handlePrintClick = () => {
@@ -99,7 +137,6 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
     dateOrdered,
     totalPrice,
     orderItems,
-    shippingInfo,
     paymentInfo,
   } = orderDetails;
 
@@ -140,22 +177,93 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
 
       <div className="shipping-info">
         <h3>Shipping Info</h3>
-        <p><strong>Name:</strong> {orderDetails.user.name}</p>
-        <p><strong>Address:</strong> {`${shippingInfo.address}`}</p>
-        <p><strong>City,State,Country:</strong> {`${shippingInfo.city} , ${shippingInfo.state} , ${shippingInfo.country}`}</p>
-        <p><strong>Postal Code:</strong> {shippingInfo.postcode}</p>
-        <p><strong>Phone:</strong> {shippingInfo.phone}</p>
+        <div className="shipping-row">
+          <div className="shipping-field">
+            <label htmlFor="address">Address</label>
+            <input
+              id="address"
+              type="text"
+              name="address"
+              value={shippingInfo.address}
+              placeholder="Address"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+        </div>
+        <div className="shipping-row">
+          <div className="shipping-field">
+            <label htmlFor="city">City</label>
+            <input
+              id="city"
+              type="text"
+              name="city"
+              value={shippingInfo.city}
+              placeholder="City"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+          <div className="shipping-field">
+            <label htmlFor="state">State</label>
+            <input
+              id="state"
+              type="text"
+              name="state"
+              value={shippingInfo.state}
+              placeholder="State"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+          <div className="shipping-field">
+            <label htmlFor="country">Country</label>
+            <input
+              id="country"
+              type="text"
+              name="country"
+              value={shippingInfo.country}
+              placeholder="Country"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+        </div>
+        <div className="shipping-row">
+          <div className="shipping-field">
+            <label htmlFor="postcode">Postal Code</label>
+            <input
+              id="postcode"
+              type="text"
+              name="postcode"
+              value={shippingInfo.postcode}
+              placeholder="Postal Code"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+          <div className="shipping-field">
+            <label htmlFor="phone">Phone</label>
+            <input
+              id="phone"
+              type="text"
+              name="phone"
+              value={shippingInfo.phone}
+              placeholder="Phone"
+              onChange={handleShippingInfoChange}
+            />
+          </div>
+        </div>
+        <button onClick={updateShippingAddress} className="button">
+          Update Address
+        </button>
       </div>
+
 
       <div className="status-update">
         <h3>Order Status</h3>
-        <select value={orderStatus} onChange={handleStatusChange} className="select">
+        <select value={orderStatus} onChange={(e) => setOrderStatus(e.target.value)} className="select">
           <option value="Processing">Processing</option>
           <option value="Shipped">Shipped</option>
           <option value="Delivered">Delivered</option>
           <option value="Cancelled">Cancelled</option>
         </select>
-        <button className="button" onClick={handleUpdateClick}>Update</button>
+        <button className="button" onClick={updateOrderStatus}>Update Status</button>
       </div>
 
       <div className="print-section">

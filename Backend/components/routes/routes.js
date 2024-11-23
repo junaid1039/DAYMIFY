@@ -11,9 +11,18 @@ const carouselController  = require('../controllers/carouselController');
 const {createQuery, getQueries,updateQuery,deleteQuery} = require('../controllers/userquoryController')
 const PopupController = require('../controllers/popupControllers');
 const {createPromoCode,validatePromoCode,getAllPromoCodes,deletePromoCode} = require('../controllers/promoController');
-
 const upload = require('../middleware/multer')
+const { subscribeUser, getAllSubscribers, unsubscribeUser,delsubscriber } = require("../controllers/NewsLetter");
 
+//newLetter routes
+// POST: Subscribe to the newsletter
+router.post("/subscribe", subscribeUser);
+// GET: Get all subscribers (admin-only endpoint)
+router.get("/subscribers", getAllSubscribers);
+// POST: Unsubscribe from the newsletter
+router.post("/unsubscribe", unsubscribeUser);
+//detete subscriber
+router.delete("/delsubscriber/:id", delsubscriber);
 
 //promo Code Routes
 router.post('/createCode',createPromoCode);
@@ -90,10 +99,9 @@ router.get('/allorders', multiAuth, orderController.getAllOrders); // Retrieves 
 router.get('/orderdetails/:id', multiAuth, orderController.getOrderDetails); // Retrieves order details
 //loged in user order details
 router.get('/myorders/:id', userauth, orderController.getMyOrders); // Retrieves order details for the user
-
 router.put('/updateOrderStatus/:id', multiAuth, orderController.updateOrderStatus);  // Updates the status of an order
-
 router.delete('/delorder/:id', multiAuth, orderController.deleteOrder); //delete orders
+router.put('/ordersadd/:id/address', orderController.updateOrderAddress);
 
 // Error handling middleware (for handling multer or any unknown errors)
 router.use((err, req, res, next) => {

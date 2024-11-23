@@ -1,0 +1,58 @@
+.admin {
+    padding: 20px;
+    width: 100%;
+    margin: 0 27px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.admin h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.admin__error {
+    color: #dc3545;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.admin__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin__table th,
+.admin__table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.admin__table th {
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+}
+
+.admin__table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.admin__delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.admin__delete-button:hover {
+    background-color: #b21f31;
+}

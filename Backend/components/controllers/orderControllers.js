@@ -156,4 +156,45 @@ const deleteOrder = async (req, res) => {
     }
 };
 
-module.exports = { newOrder, getOrderDetails, getAllOrders, getMyOrders, updateOrderStatus, deleteOrder };
+const updateOrderAddress = async (req, res) => {
+    const { id } = req.params; // Order ID passed in the route params
+    const { shippingInfo } = req.body; // New shipping info from the request body
+
+    try {
+        // Validate input
+        if (!shippingInfo || typeof shippingInfo !== 'object') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid shipping information provided.',
+            });
+        }
+
+        // Find the order by orderId
+        const order = await Order.findOne({ orderId: id });
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found.',
+            });
+        }
+
+        // Update the shipping address
+        order.shippingInfo = { ...order.shippingInfo, ...shippingInfo };
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Shipping address updated successfully.',
+            order,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update shipping address.',
+            error: error.message,
+        });
+    }
+};
+
+
+module.exports = { updateOrderAddress, newOrder, getOrderDetails, getAllOrders, getMyOrders, updateOrderStatus, deleteOrder };

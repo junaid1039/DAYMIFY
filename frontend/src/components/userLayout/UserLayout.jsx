@@ -12,6 +12,8 @@ import Payment from '../confirmorder/Payment';
 import Ordersuccess from '../ordersuccess/Ordersuccess';
 import AboutUs from '../aboutus/AboutUs';
 import ContactUs from '../contactus/ContactUs';
+import NewsletterSubscribe from '../newsLetter/NewsletterSubscribe';
+
 
 
 
@@ -38,6 +40,7 @@ const UserLayout = () => {
                 <Route path='/ordersuccess' element={<Ordersuccess />} />
                 <Route path='/aboutus' element={<AboutUs />} />
                 <Route path='/contactus' element={<ContactUs/>}/>
+                <Route path='/newsletter' element={<NewsletterSubscribe/>} />
                 
             </Routes>
             <Footer />

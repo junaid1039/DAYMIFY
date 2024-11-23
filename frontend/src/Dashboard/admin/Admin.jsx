@@ -13,6 +13,7 @@ import AdminCarousel from '../admincarousel/AdminCarousel.jsx';
 import AdminQueries from '../adminquories/AdminQueries.jsx';
 import Adminpopup from '../popup/Adminpopup.jsx';
 import AdminPromoCode from '../AdminpromoCode/AdminPromoCode.jsx';
+import AdminNews from '../adminNews/AdminNews.jsx';
 
 const Admin = () => {
   const token = sessionStorage.getItem('auth-token');
@@ -38,6 +39,7 @@ const Admin = () => {
           <Route path="queries" element={<AdminQueries />} />
           <Route path="popup" element={<Adminpopup />} />
           <Route path="promocode" element={<AdminPromoCode />} />
+          <Route path="adminletter" element={<AdminNews/>} />
         </>
       );
     } else if (userRole === 'Editor') {

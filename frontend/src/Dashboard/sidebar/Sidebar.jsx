@@ -10,6 +10,8 @@ import { BiCarousel } from "react-icons/bi";
 import { IoMdNotifications } from "react-icons/io";
 import { AiOutlineMessage } from "react-icons/ai";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import { FaRegNewspaper } from "react-icons/fa";
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +35,7 @@ const Sidebar = () => {
     { path: "queries", label: "Manage Queries", icon: <AiOutlineMessage />, roles: ['Admin', 'Owner'] },
     { path: "popup", label: "Popups", icon: <IoMdNotifications />, roles: ['Admin', 'Owner', "Editor"] },
     { path: "promocode", label: "Promo Codes", icon: <RiDiscountPercentLine />, roles: ['Admin', 'Owner'] },
+    { path: 'adminletter', label: "NewsLetters", icon: <FaRegNewspaper/> , roles: ['Admin', 'Owner'] },
   ];
 
   return (
