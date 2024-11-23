@@ -65,7 +65,7 @@ const multiAuth = (req, res, next) => {
         req.user = decoded; // Attach user data to the request object
 
         // Check if the user's role is admin, owner, or editor
-        const allowedRoles = [process.env.ROLE, 'Owner', 'Editor']; // Use environment variable for admin, and explicitly allow owner & editor
+        const allowedRoles = [process.env.ROLE, 'Owner', 'Editor', 'Auditor', 'Marketer', 'Shipper','Overviewer' ]; // Use environment variable for admin, and explicitly allow owner & editor
         if (!allowedRoles.includes(req.user.role)) {
             return res.status(403).json({ 
                 success: false, 

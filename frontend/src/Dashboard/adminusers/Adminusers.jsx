@@ -216,6 +216,10 @@ const AdminUsers = () => {
                         <option value="User">User</option>
                         <option value="Admin">Admin</option>
                         <option value="Editor">Editor</option>
+                        <option value="Marketer">Markter</option>
+                        <option value="Shipper">Shipper</option>
+                        <option value="Auditor">Auditor</option>
+                        <option value="Overviewer">Overviewer</option>
                     </select>
                     
                     {/* Components Selection */}
