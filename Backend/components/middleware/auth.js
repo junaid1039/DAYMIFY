@@ -17,19 +17,19 @@ const auth = (req, res, next) => {
         // Check if the user's role is either admin or owner
         const allowedRoles = [process.env.ROLE, 'Owner']; // Use admin from environment variable and explicitly allow owner
         if (!allowedRoles.includes(req.user.role)) {
-            return res.status(403).json({ 
-                success: false, 
-                message: 'Access denied. Insufficient privileges.' 
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied. Insufficient privileges.'
             });
         }
 
         next(); // User is authorized
     } catch (error) {
         // Provide more context in the error response
-        res.status(400).json({ 
-            success: false, 
-            message: 'Invalid token', 
-            error: error.message 
+        res.status(400).json({
+            success: false,
+            message: 'Invalid token',
+            error: error.message
         });
     }
 };
@@ -65,21 +65,21 @@ const multiAuth = (req, res, next) => {
         req.user = decoded; // Attach user data to the request object
 
         // Check if the user's role is admin, owner, or editor
-        const allowedRoles = [process.env.ROLE, 'Owner', 'Editor', 'Auditor', 'Marketer', 'Shipper','Overviewer' ]; // Use environment variable for admin, and explicitly allow owner & editor
+        const allowedRoles = [process.env.ROLE, 'Owner', 'Editor', 'Auditor', 'Marketer', 'Shipper', 'Overviewer']; // Use environment variable for admin, and explicitly allow owner & editor
         if (!allowedRoles.includes(req.user.role)) {
-            return res.status(403).json({ 
-                success: false, 
-                message: 'Access denied. Insufficient privileges.' 
+            return res.status(403).json({
+                success: false,
+                message: 'Access denied. Insufficient privileges.'
             });
         }
 
         next(); // User is authorized
     } catch (error) {
         // Handle invalid token
-        res.status(400).json({ 
-            success: false, 
-            message: 'Invalid token', 
-            error: error.message 
+        res.status(400).json({
+            success: false,
+            message: 'Invalid token',
+            error: error.message
         });
     }
 };
