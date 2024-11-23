@@ -88,6 +88,36 @@ input[type="email"] {
     font-size: 14px;
 }
 
+
+.components-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;  /* Space between checkboxes */
+}
+
+.component-checkbox {
+    width: calc(25% - 10px);  /* Each checkbox takes up 25% of the row width, minus space between */
+    display: flex;
+    align-items: center;
+}
+
+.component-checkbox label {
+    margin-left: 5px;  /* Space between checkbox and label */
+}
+
+@media (max-width: 768px) {
+    .component-checkbox {
+        width: calc(50% - 10px);  /* On smaller screens, show 2 checkboxes per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .component-checkbox {
+        width: 100%;  /* On very small screens, show 1 checkbox per row */
+    }
+}
+
+
 /* Confirmation Dialog Styles */
 .confirm-delete {
     position: fixed;

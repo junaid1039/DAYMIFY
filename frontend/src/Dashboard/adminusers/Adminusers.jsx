@@ -11,10 +11,16 @@ const AdminUsers = () => {
     const { fetchUsers } = useContext(Context);
     const [users, setUsers] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
-    const [editUser, setEditUser] = useState({ name: '', email: '', role: '' });
+    const [editUser, setEditUser] = useState({ name: '', email: '', role: '', allowComponents: [] });
     const [confirmDeleteId, setConfirmDeleteId] = useState(null);
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
+
+    const components = [
+        'Addproduct', 'AdminCarousel', 'AdminDashboard', 'AdminNews', 'AdminPromoCode',
+        'AdminQueries', 'AdminUsers', 'AdminOrders', 'Editproduct', 'Orderdetails', 'AdminPopup',
+        'Productlist'
+    ];
 
     // Fetch users from backend
     useEffect(() => {
@@ -40,7 +46,12 @@ const AdminUsers = () => {
             return;
         }
         setEditingUserId(user._id);
-        setEditUser({ name: user.name, email: user.email, role: user.role });
+        setEditUser({
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            allowComponents: user.allowComponents || [] // This will pre-populate the components checkboxes
+        });
     }, []);
 
     // Delete function
@@ -81,6 +92,17 @@ const AdminUsers = () => {
     const handleInputChange = useCallback((e) => {
         const { name, value } = e.target;
         setEditUser((prev) => ({ ...prev, [name]: value }));
+    }, []);
+
+    // Handle checkbox change for components
+    const handleComponentChange = useCallback((e) => {
+        const { value, checked } = e.target;
+        setEditUser((prev) => {
+            const newComponents = checked
+                ? [...prev.allowComponents, value]
+                : prev.allowComponents.filter((component) => component !== value);
+            return { ...prev, allowComponents: newComponents };
+        });
     }, []);
 
     // User info change API
@@ -193,6 +215,23 @@ const AdminUsers = () => {
                         <option value="Admin">Admin</option>
                         <option value="Editor">Editor</option>
                     </select>
+                    
+                    {/* Components Selection */}
+                    <label>Components:</label>
+                    <div className="components-selection">
+                        {components.map((component) => (
+                            <div key={component}>
+                                <input
+                                    type="checkbox"
+                                    value={component}
+                                    checked={editUser.allowComponents.includes(component)} // Checks if the component is selected
+                                    onChange={handleComponentChange}
+                                />
+                                <label>{component}</label>
+                            </div>
+                        ))}
+                    </div>
+                    
                     <button onClick={handleSaveClick} className="save-button">
                         <TiTickOutline /> Save
                     </button>
@@ -206,4 +245,3 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
-

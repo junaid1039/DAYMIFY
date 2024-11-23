@@ -17,16 +17,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "user",
     },
-    // Define structured cartData for better management
-    //cartData: [
-    //    {
-    //        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: false },
-    //        quantity: { type: Number, default: 1, required: FinalizationRegistry },
-    //        color: { type: String, required: false },  // Selected color
-    //        size: { type: String, required: false }    // Selected size
-    //    }
-    //],
-    
+    allowComponents: { 
+        type: [String],
+        default: [] 
+    },
     date: { type: Date, default: Date.now }
 });
 

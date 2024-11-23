@@ -1,10 +1,11 @@
+const mongoose = require('mongoose');
 const Users = require('../models/usermodel');
 const jwt = require('jsonwebtoken');
 
 function newId() {
     const prefix = 'usr';
     const randomNumber = Math.floor(Math.random() * 100000);
-    return `${prefix}${randomNumber.toString().padStart(5, '0')}`; 
+    return `${prefix}${randomNumber.toString().padStart(5, '0')}`;
 }
 
 // Sign up a new user
@@ -15,23 +16,28 @@ const signup = async (req, res) => {
             return res.status(400).json({ success: false, err: 'User Already Exists' });
         }
 
+        // Initialize cart object
         const cart = {};
         for (let i = 0; i < 300; i++) {
             cart[i] = 0;
         }
 
-        const { name, email, password } = req.body;
+        const { name, email, password, allowComponents } = req.body;
+
+        // Default avatar if not provided
+        const avatar = {
+            public_id: 'some public id',
+            url: 'some url'
+        };
 
         const user = await Users.create({
             userId: newId(),
             name,
             email,
             password, // No hashing, as per your request
-            avatar: {
-                public_id: 'some public id',
-                url: 'some url'
-            },
-            cartData: cart,
+            avatar,
+            role: 'user',
+            allowComponents: allowComponents || [],  // Default to empty array if not provided
         });
 
         // Generate JWT without expiration
@@ -93,10 +99,14 @@ const getAllUsers = async (req, res) => {
 // Update user details
 const updateUserDetails = async (req, res) => {
     try {
+        const { name, email, role, allowComponents, avatar } = req.body;
+
         const newUserData = {
-            name: req.body.name,
-            email: req.body.email,
-            role: req.body.role,
+            name,
+            email,
+            role,
+            allowComponents: allowComponents || [],  // Default to empty array if not provided
+            avatar: avatar || {},  // Default to empty object if not provided
         };
 
         const user = await Users.findByIdAndUpdate(req.params.id, newUserData, { new: true, runValidators: true, useFindAndModify: false });

@@ -70,7 +70,7 @@ router.get('/adminproducts', multiAuth, productController.adminAllProducts);// f
 router.get('/subcategorys', productController.subcategorys); // Fetches all subcategories
 
 //verify Token
-router.get('/verification', auth);
+router.get('/verification', multiAuth);
 
 // User routes (Signup and Login)
 router.post('/signup', userController.signup); // User registration
@@ -82,13 +82,13 @@ router.post('/removefromcart', cartController.removeFromCart); // Removes an ite
 router.post('/getcart', userauth, cartController.getCart); // Retrieves the current user's cart items
 
 // Users route
-router.get('/users', auth, userController.getAllUsers); // Retrieves all users (admin only)
+router.get('/users', multiAuth, userController.getAllUsers); // Retrieves all users (admin only)
 // Single user details
-router.get('/userdetails/:id', userauth , userController.getSingleUser); // Retrieves a user's
+router.get('/userdetails/:id', userController.getSingleUser); // Retrieves a user's
 // Update user details
-router.put('/updateuserdetails/:id', auth, userController.updateUserDetails); // Updates a user's
+router.put('/updateuserdetails/:id', multiAuth, userController.updateUserDetails); // Updates a user's
 // Delete user
-router.delete('/deleteuser/:id', auth, userController.deleteUser); // Deletes a user 
+router.delete('/deleteuser/:id', multiAuth, userController.deleteUser); // Deletes a user 
 
 
 // Order Routes
