@@ -22,6 +22,8 @@ const AdminUsers = () => {
         'Productlist'
     ];
 
+    const memoizedFetchUsers = useCallback(fetchUsers, []);
+
     // Fetch users from backend
     useEffect(() => {
         const loadUsers = async () => {
@@ -37,7 +39,7 @@ const AdminUsers = () => {
         };
 
         loadUsers();
-    }, [fetchUsers]);
+    }, [memoizedFetchUsers]);
 
     // Edit function
     const handleEditClick = useCallback((user) => {
