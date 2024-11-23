@@ -9,7 +9,6 @@ const getStoredCart = () => {
 const ContextProvider = (props) => {
 
 
-
     const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
     const [cart, setCart] = useState(getStoredCart());
