@@ -10,7 +10,6 @@ const Body = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupData, setPopupData] = useState(null);
 
-
   useEffect(() => {
     const fetchActivePopups = async () => {
       try {
