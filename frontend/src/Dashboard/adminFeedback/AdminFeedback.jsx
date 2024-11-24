@@ -5,7 +5,6 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'; // Icons for 
 const AdminFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [replyData, setReplyData] = useState({});
-
   const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
   useEffect(() => {
