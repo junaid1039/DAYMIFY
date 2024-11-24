@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './AdminFeedback.css';
+import './adminFeedback.css';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'; // Icons for stars
 
 const AdminFeedback = () => {
