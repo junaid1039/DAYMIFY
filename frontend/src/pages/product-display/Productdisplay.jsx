@@ -81,8 +81,13 @@ const Productdisplay = ({ product }) => {
             return;
         }
 
-        // Add to cart with or without size/color
-        addToCart(product.id, selectedColor || null, selectedSize || null);
+        // If no size or color selected, use "none"
+        const colorToSend = selectedColor || "none";
+        const sizeToSend = selectedSize || "none";
+
+        // Add to cart with selected color and size, or "none"
+        addToCart(product.id, colorToSend, sizeToSend);
+
         setTimeout(() => {
             setIsProcessing(false); // Reset after processing
         }, 300); // Adjust timeout if necessary
@@ -99,8 +104,12 @@ const Productdisplay = ({ product }) => {
             return;
         }
 
+        // If no size or color selected, use "none"
+        const colorToSend = selectedColor || "none";
+        const sizeToSend = selectedSize || "none";
+
         // Add to cart and navigate to checkout
-        addToCart(product.id, selectedColor || null, selectedSize || null);
+        addToCart(product.id, colorToSend, sizeToSend);
         navigate('/cart/checkout');
 
         setTimeout(() => {
@@ -194,7 +203,7 @@ const Productdisplay = ({ product }) => {
                 </div>
             </div>
             <Description description={product.description} />
-            <ProductFeedback productId={product.id}/>
+            <ProductFeedback productId={product.id} />
         </>
     );
 };
