@@ -15,7 +15,6 @@ const Fullproductdisplay = () => {
     if (!allproducts || allproducts.length === 0) {
         return <div>{<Loader/>}</div>; // You can show a loading indicator or a placeholder
     }
-
     // Find the product that matches the URL id
     const product = allproducts.find((e) => e.id === Number(id));
     // Handle the case where no product is found
