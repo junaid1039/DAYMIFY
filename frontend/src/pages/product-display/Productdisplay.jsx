@@ -18,7 +18,6 @@ const getCurrencySymbol = (currency) => {
     }
 };
 
-// Function to render stars based on the rating
 const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -34,16 +33,42 @@ const renderStars = (rating) => {
 };
 
 const Productdisplay = ({ product }) => {
+    const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
     const [mainImage, setMainImage] = useState(product.images?.[0] || product.image);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [isProcessing, setIsProcessing] = useState(false); // State to prevent double clicks
+    const [feedbacks, setFeedbacks] = useState([]); // State to store feedback data
+    const [averageRating, setAverageRating] = useState(0); // State for average rating
+    const [totalRatings, setTotalRatings] = useState(0); // State for total ratings
     const { addToCart } = useContext(Context);
     const navigate = useNavigate();
 
     useEffect(() => {
         setMainImage(product.images?.[0] || product.image);
     }, [product]);
+
+    // Fetch feedbacks from the backend
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await fetch(`${baseurl}/feedback/${product.id}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Error fetching feedback');
+                setFeedbacks(data.feedbacks); // Assuming data has 'feedbacks' array
+
+                // Calculate average rating and total ratings
+                const total = data.feedbacks.length;
+                const sum = data.feedbacks.reduce((acc, feedback) => acc + feedback.rating, 0);
+                setAverageRating(total > 0 ? (sum / total).toFixed(1) : 0);
+                setTotalRatings(total);
+            } catch (err) {
+                console.error(err.message);
+            }
+        };
+
+        fetchFeedbacks();
+    }, [product.id]);
 
     const handleAddToCart = useCallback(() => {
         if (isProcessing) return;
@@ -118,10 +143,10 @@ const Productdisplay = ({ product }) => {
                     </div>
 
                     {/* Display average rating stars */}
-                    {product.rating && (
+                    {averageRating > 0 && (
                         <div className="product-display__rating">
-                            <span>Rating: </span>
-                            {renderStars(product.rating)} {/* Call the function to render stars */}
+                            {renderStars(averageRating)} {/* Call the function to render stars */}
+                            <span>({totalRatings})</span> {/* Display the number of ratings */}
                         </div>
                     )}
 
