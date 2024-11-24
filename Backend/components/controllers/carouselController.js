@@ -5,6 +5,7 @@ const addCarousel = async (req, res) => {
     try {
         const { carousel, linkto, subcategory, title, description } = req.body; // Include all fields
 
+        
         if (!carousel) {
             return res.status(400).json({ message: 'Carousel image URL is required.' });
         }
