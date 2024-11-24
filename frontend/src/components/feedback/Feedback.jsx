@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Feedback.css';
+import './feedback.css';
 
 const Feedback = ({ orderId, productId, onFeedbackSubmitted }) => {
   const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
