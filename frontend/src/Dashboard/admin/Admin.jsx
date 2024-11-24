@@ -15,6 +15,7 @@ import Adminpopup from '../popup/Adminpopup.jsx';
 import AdminPromoCode from '../AdminpromoCode/AdminPromoCode.jsx';
 import AdminNews from '../adminNews/AdminNews.jsx';
 import Loader from '../../components/loader/Loader.jsx';
+import AdminFeedback from '../adminFeedback/AdminFeedback.jsx';
 
 const Admin = () => {
   const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
@@ -31,7 +32,7 @@ const Admin = () => {
         try {
           const response = await fetch(`${baseurl}/userdetails/${userId}`);
           const userData = await response.json();
-          console.log('Fetched userdata:', userData);
+          
   
           if (userData?.user?.role === 'Owner') {
             // Full access for Owner role
@@ -71,7 +72,6 @@ const Admin = () => {
 
   // Dynamically render routes
   const renderRoutes = () => {
-    console.log('Rendering routes with:', allowComponents);
 
     if (allowComponents.includes('Fullaccess')) {
       return (
@@ -87,6 +87,7 @@ const Admin = () => {
           <Route path="popup" element={<Adminpopup />} key="admin-popup" />
           <Route path="promocode" element={<AdminPromoCode />} key="admin-promocode" />
           <Route path="adminletter" element={<AdminNews />} key="admin-news" />
+          <Route path="feedbacks" element={<AdminFeedback/>} key="feedbacks" />
         </>
       );
     }
@@ -124,6 +125,9 @@ const Admin = () => {
     }
     if (allowComponents.includes('AdminNews')) {
       routes.push(<Route path="adminletter" element={<AdminNews />} key="admin-news" />);
+    }
+    if (allowComponents.includes('Feedbacks')) {
+      routes.push(<Route path="feedbacks" element={<AdminFeedback/>} key="feedbacks" />)
     }
 
     return routes;

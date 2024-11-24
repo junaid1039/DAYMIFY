@@ -42,7 +42,7 @@ const AdminOrders = () => {
     };
 
     const confirmDeleteOrder = (id) => {
-        console.log("here is the id",id);
+        console.log("here is the id", id);
         setOrderToDelete(id);
         setShowConfirmDelete(true);
     };
@@ -88,6 +88,8 @@ const AdminOrders = () => {
                 return 'status-delivered';
             case 'Cancelled':
                 return 'status-cancelled';
+            case 'Completed':
+                return 'status-completed';
             default:
                 return '';
         }

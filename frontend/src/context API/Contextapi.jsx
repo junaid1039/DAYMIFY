@@ -288,7 +288,7 @@ const ContextProvider = (props) => {
             return;
         }
         setError(''); // Clear previous errors
-
+    
         // Create order data
         const orderData = {
             user: sessionStorage.getItem('userId'), // Assuming you have the user's ID
@@ -297,6 +297,7 @@ const ContextProvider = (props) => {
                 const productInfo = allproducts.find(product => product.id === Number(itemId));
                 return {
                     product: productInfo ? productInfo._id : null,
+                    productId: productInfo ? productInfo.id : '', // Include productId here
                     name: productInfo ? productInfo.name : '',
                     quantity,
                     price: productInfo ? productInfo.newprice : 0,
@@ -305,9 +306,9 @@ const ContextProvider = (props) => {
                     size: cart[itemId]?.size,
                 };
             }).filter(item => item.product !== null && item.quantity > 0), // Only include valid products with quantity > 0
-
+    
             shippingInfo: shippingInfo,
-
+    
             paymentInfo: {
                 method: paymentMethod, // Use the correct variable for payment method
                 id: '123', // Assuming you'll set this when payment is confirmed
@@ -319,7 +320,7 @@ const ContextProvider = (props) => {
             shippingPrice: 0, // Set shipping price if applicable
             dateOrdered: Date.now() // Automatically set the order creation date
         };
-
+    
         // Send order data to the server
         fetch(`${baseurl}/confirmorder`, {
             method: 'POST',
@@ -342,6 +343,7 @@ const ContextProvider = (props) => {
                 alert('Error while confirming the order.');
             });
     };
+    
 
 
     useEffect(() => {
@@ -511,6 +513,7 @@ const ContextProvider = (props) => {
         isLoggedIn,
         cart,
         countryCode,
+        shippingInfo,
         fetchUserIP,
         fetchCarousels,
         fnadminproducts,

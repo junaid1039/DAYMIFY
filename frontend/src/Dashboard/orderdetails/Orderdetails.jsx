@@ -262,6 +262,7 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
           <option value="Shipped">Shipped</option>
           <option value="Delivered">Delivered</option>
           <option value="Cancelled">Cancelled</option>
+          <option value="Completed">Completed</option>
         </select>
         <button className="button" onClick={updateOrderStatus}>Update Status</button>
       </div>

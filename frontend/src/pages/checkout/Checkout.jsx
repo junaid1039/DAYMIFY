@@ -14,8 +14,8 @@ const Checkout = ({ user }) => {
     // Load from local storage if available
     const savedShippingInfo = JSON.parse(localStorage.getItem('shippingInfo')) || {};
 
-    const [name, setName] = useState(user?.name || ''); // Fetch from user or DB
-    const [email, setEmail] = useState(user?.email || ''); // Fetch from user or DB
+    const [name, setName] = useState(user?.name || ""); // Fetch from user or DB
+    const [email, setEmail] = useState(user?.email || ""); // Fetch from user or DB
     const [country, setcountry] = useState(savedShippingInfo.country || "");
     const [state, setstate] = useState(savedShippingInfo.state || "");
     const [address, setAddress] = useState(savedShippingInfo.address || "");

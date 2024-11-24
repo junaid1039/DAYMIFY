@@ -19,7 +19,7 @@ const AdminUsers = () => {
     const components = [
         'Addproduct', 'AdminCarousel', 'AdminDashboard', 'AdminNews', 'AdminPromoCode',
         'AdminQueries', 'AdminUsers', 'AdminOrders', 'Editproduct', 'Orderdetails', 'AdminPopup',
-        'Productlist'
+        'Productlist', 'Feedbacks'
     ];
 
     const memoizedFetchUsers = useCallback(fetchUsers, []);

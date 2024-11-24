@@ -10,12 +10,11 @@ function newId() {
 const newOrder = async (req, res) => {
     const {
         shippingInfo,
-        orderItems, // This should include color and size as part of the order items
+        orderItems, // This should include productId
         paymentInfo,
         totalPrice,
         shippingPrice
     } = req.body;
-
 
     try {
         let orderId;
@@ -24,11 +23,15 @@ const newOrder = async (req, res) => {
             orderId = newId();
         } while (await Order.findOne({ orderId }));
 
-        // Ensure the orderItems contain the color and size
+        // Include productId in orderItems
         const updatedOrderItems = orderItems.map(item => ({
-            ...item,
-            color: item.color,  // Ensure color is included
-            size: item.size     // Ensure size is included
+            productId: item.productId, // Add productId from the request
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+            color: item.color, // Keep existing fields
+            size: item.size   // Keep existing fields
         }));
 
         const order = await Order.create({
@@ -48,6 +51,7 @@ const newOrder = async (req, res) => {
         console.log(error);
     }
 };
+
 
 // Get all orders -- Admin
 const getAllOrders = async (req, res) => {
@@ -100,17 +104,20 @@ const getMyOrders = async (req, res) => {
             return res.status(404).json({ success: false, message: "No orders found." });
         }
 
-        // Ensuring that each order includes color and size details
+        // Ensuring that each order includes color, size, and orderId details
         const userOrders = orders.map(order => ({
             ...order.toObject(),
+            orderId: order.orderId, // Include orderId
             orderItems: order.orderItems.map(item => ({
                 product: item.product,
                 name: item.name,
+                productId: item.productId,
                 quantity: item.quantity,
                 price: item.price,
                 image: item.image,
                 color: item.color, // Include color
-                size: item.size    // Include size
+                size: item.size,   // Include size
+                orderId: order.orderId // Include orderId in each item as well
             }))
         }));
 
@@ -119,6 +126,7 @@ const getMyOrders = async (req, res) => {
         res.status(500).json({ success: false, message: "Failed to get order details", error: error.message });
     }
 };
+
 
 // Update order status -- Admin
 const updateOrderStatus = async (req, res) => {

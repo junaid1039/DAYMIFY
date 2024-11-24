@@ -4,6 +4,8 @@ import './productdisplay.css';
 import { Context } from '../../context API/Contextapi';
 import { useNavigate } from 'react-router-dom';
 import Description from '../../components/description/Description';
+import ProductFeedback from '../../components/productFeedback/ProductFeedback';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'; // Add the star icons for ratings
 
 const getCurrencySymbol = (currency) => {
     switch (currency) {
@@ -14,6 +16,21 @@ const getCurrencySymbol = (currency) => {
         case 'PK': return '₨';
         default: return '$';
     }
+};
+
+// Function to render stars based on the rating
+const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars.push(<FaStar key={i} className="star-icon full" />);
+        } else if (i - 0.5 <= rating) {
+            stars.push(<FaStarHalfAlt key={i} className="star-icon half" />);
+        } else {
+            stars.push(<FaRegStar key={i} className="star-icon empty" />);
+        }
+    }
+    return stars;
 };
 
 const Productdisplay = ({ product }) => {
@@ -100,6 +117,14 @@ const Productdisplay = ({ product }) => {
                         <div className="product-display__new-price">{currencySymbol} {product.newprice}</div>
                     </div>
 
+                    {/* Display average rating stars */}
+                    {product.rating && (
+                        <div className="product-display__rating">
+                            <span>Rating: </span>
+                            {renderStars(product.rating)} {/* Call the function to render stars */}
+                        </div>
+                    )}
+
                     {/* Size Selection */}
                     {product.sizes?.length > 0 && (
                         <div className="product-display__size-selection">
@@ -144,6 +169,7 @@ const Productdisplay = ({ product }) => {
                 </div>
             </div>
             <Description description={product.description} />
+            <ProductFeedback productId={product.id}/>
         </>
     );
 };
@@ -161,6 +187,7 @@ Productdisplay.propTypes = {
         category: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         countryCode: PropTypes.string.isRequired,
+        rating: PropTypes.number, // Assuming the product has a rating field
     }).isRequired,
 };
 

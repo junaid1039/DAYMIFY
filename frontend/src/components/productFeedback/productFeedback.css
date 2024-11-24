@@ -1,0 +1,82 @@
+/* ProductFeedback.css */
+.product-feedback {
+    margin: 20px 10%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .product-feedback h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .feedback-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .feedback-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+  
+  .feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .feedback-user {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .feedback-rating {
+    color: #ffd700;
+  }
+  
+  .star {
+    font-size: 1.2rem;
+  }
+  
+  .star.filled {
+    color: #ffd700;
+  }
+  
+  .feedback-comment {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .admin-reply {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 4px solid #4caf50;
+    background-color: #f1f8e9;
+  }
+  
+  .admin-reply-header {
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  .admin-reply-comment {
+    font-size: 1rem;
+    color: #4caf50;
+  }
+  
+  @media (max-width: 768px) {
+    .product-feedback {
+      padding: 10px;
+    }
+    .feedback-item {
+      padding: 15px;
+    }
+  }
+  

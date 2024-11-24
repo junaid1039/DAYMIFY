@@ -13,6 +13,18 @@ const PopupController = require('../controllers/popupControllers');
 const {createPromoCode,validatePromoCode,getAllPromoCodes,deletePromoCode} = require('../controllers/promoController');
 const upload = require('../middleware/multer')
 const { subscribeUser, getAllSubscribers, unsubscribeUser,delsubscriber } = require("../controllers/NewsLetter");
+const feedbackController = require('../controllers/feedbackController');
+
+
+router.get('/feedbacks', feedbackController.getAllFeedbacks);
+router.post('/feedback', feedbackController.addFeedback); // Add feedback for an order
+router.get('/feedback/:productId', feedbackController.getFeedbacksByProductId); // Get feedbacks by productId
+router.get('/feedback/order/:orderId', feedbackController.getFeedbackByOrderId); // Get feedback by orderId
+router.put('/feedback/:productId/:feedbackId/reply', feedbackController.replyToComment); // Reply to a feedback comment
+router.delete('/feedback/:productId/:feedbackId', feedbackController.deleteFeedback); // Delete a feedback by feedbackId
+router.put('/feedback/:productId/:feedbackId', feedbackController.editFeedback); // Edit a feedback by feedbackId
+
+
 
 //newLetter routes
 // POST: Subscribe to the newsletter

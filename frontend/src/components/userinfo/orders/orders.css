@@ -75,3 +75,31 @@
   color: #555;
   padding: 20px 0;
 }
+
+.myOrders__toggleFeedbackButton {
+  background-color: #f8f8f8;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 0.95em;
+  margin-bottom: 10px;
+}
+
+.myOrders__toggleFeedbackButton:hover {
+  text-decoration: underline;
+}
+
+.myOrders__feedbackForm {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.myOrders__feedbackProvided {
+  font-size: 0.95em;
+  color: #28a745;
+}

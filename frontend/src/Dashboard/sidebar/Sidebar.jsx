@@ -11,6 +11,8 @@ import { IoMdNotifications } from "react-icons/io";
 import { AiOutlineMessage } from "react-icons/ai";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import { FaRegNewspaper } from "react-icons/fa";
+import { VscFeedback } from "react-icons/vsc";
+
 
 const SidebarItem = React.memo(({ item }) => (
   <Link to={item.path} className="sidebar_item" aria-label={item.label}>
@@ -36,7 +38,7 @@ const Sidebar = () => {
       try {
         const response = await fetch(`${baseurl}/userdetails/${userId}`);
         const userData = await response.json();
-        console.log('Fetched userdata:', userData);
+        
 
         if (userData?.user?.role === 'Owner') {
           // Full access for Owner role
@@ -76,6 +78,7 @@ const Sidebar = () => {
     { path: "popup", label: "Popups", icon: <IoMdNotifications />, key: "Adminpopup" },
     { path: "promocode", label: "Promo Codes", icon: <RiDiscountPercentLine />, key: "AdminPromoCode" },
     { path: "adminletter", label: "Newsletters", icon: <FaRegNewspaper />, key: "AdminNews" },
+    { path: "feedbacks", label: "Feedbacks", icon: <VscFeedback />, key: "feedbacks" },
   ], []);
 
   // Loading spinner

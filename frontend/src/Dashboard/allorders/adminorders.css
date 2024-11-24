@@ -59,6 +59,7 @@
   color: white;
 }
 
+
 /* Specific status classes */
 .status-processing {
   background-color: #ffcc00; /* Yellow for processing */
@@ -75,6 +76,13 @@
 .status-cancelled {
   background-color: rgb(210, 1, 1); /* Red for cancelled */
 }
+
+.status-completed {
+  background-color: rgb(42, 42, 42); /* Dark gray for completed */
+  color: white; /* White text to contrast with dark background */
+}
+
+
 
 /* Button Styling */
 .save-button,
