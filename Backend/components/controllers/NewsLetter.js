@@ -15,6 +15,7 @@ exports.subscribeUser = async (req, res) => {
             return res.status(400).json({ message: "Email is already subscribed." });
         }
 
+        
         // Save the new subscriber
         const newSubscriber = new Newsletter({ name, email });
         await newSubscriber.save();
