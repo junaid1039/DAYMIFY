@@ -180,7 +180,7 @@ const AdminDashboard = () => {
                     </div>
                 </div>
                 <div className="stats-box">
-                    <FaDollarSign className="stat-icon" />
+                    <h4>PKR</h4>
                     <div>
                         <p>Total Sales</p>
                         <h3>${stats.totalSales.toFixed(2)}</h3>
