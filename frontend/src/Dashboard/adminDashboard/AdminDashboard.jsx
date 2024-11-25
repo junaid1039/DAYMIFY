@@ -180,10 +180,10 @@ const AdminDashboard = () => {
                     </div>
                 </div>
                 <div className="stats-box">
-                    <h4>PKR</h4>
+                    
                     <div>
                         <p>Total Sales</p>
-                        <h3>${stats.totalSales.toFixed(2)}</h3>
+                        <h3>PKR {stats.totalSales.toFixed(2)}</h3>
                         <select className="sales-dropdown" value={selectedPeriod} onChange={handlePeriodChange}>
                             <option value="all">All Time</option>
                             <option value="today">Today</option>
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
                     {latestOrders.length > 0 ? (
                         latestOrders.map((order) => (
                             <li key={order._id}>
-                                Order # {order._id} - ${order.totalPrice} - {new Date(order.dateOrdered).toLocaleDateString()}
+                                Order # {order._id} - PKR{order.totalPrice} - {new Date(order.dateOrdered).toLocaleDateString()}
                             </li>
                         ))
                     ) : (
