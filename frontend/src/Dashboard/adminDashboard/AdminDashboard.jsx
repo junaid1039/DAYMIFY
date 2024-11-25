@@ -205,7 +205,7 @@ const AdminDashboard = () => {
                     {latestOrders.length > 0 ? (
                         latestOrders.map((order) => (
                             <li key={order._id}>
-                                Order # {order._id} - PKR{order.totalPrice} - {new Date(order.dateOrdered).toLocaleDateString()}
+                                Order # {order._id} - PKR {order.totalPrice} - {new Date(order.dateOrdered).toLocaleDateString()}
                             </li>
                         ))
                     ) : (
