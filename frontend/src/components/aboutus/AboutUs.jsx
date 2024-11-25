@@ -14,7 +14,7 @@ const AboutUs = () => {
             </p>
             <h2>Our Mission</h2>
             <p>
-                We strive to [your mission details]. Our team works tirelessly to ensure customer satisfaction through quality products, exceptional service, and a commitment to excellence.
+                We strive to [your mission details]. Our team    works tirelessly to ensure customer satisfaction through quality products, exceptional service, and a commitment to excellence.
             </p>
             <h2>Our Values</h2>
             <ul>
