@@ -4,6 +4,7 @@
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
+    font-family: sans-serif;
   }
   
   .product-feedback h3 {
@@ -77,6 +78,11 @@
     }
     .feedback-item {
       padding: 15px;
+    }
+  }
+  @media (max-width: 500px) {
+    .product-feedback {
+      margin: 20px 2%;
     }
   }
   

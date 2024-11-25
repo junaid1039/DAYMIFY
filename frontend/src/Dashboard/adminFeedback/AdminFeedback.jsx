@@ -78,8 +78,6 @@ const AdminFeedback = () => {
 
   return (
     <div className="admin-feedback-container">
-      <h1 className="admin-feedback-title">Admin Feedback Management</h1>
-
       <section className="feedback-section">
         <h2 className="section-title">All Feedbacks</h2>
         <button className="refresh-button" onClick={fetchAllFeedbacks}>

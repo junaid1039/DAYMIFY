@@ -8,6 +8,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
 /* Title Styling */
@@ -61,6 +62,7 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 5px;
     resize: vertical;
+    box-sizing: border-box;
 }
 
 textarea:focus {
@@ -92,7 +94,7 @@ textarea:focus {
     }
 
     .star {
-        font-size: 20px;
+        font-size: 30px;
     }
 
     .submit-button {
