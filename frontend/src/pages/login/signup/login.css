@@ -89,6 +89,9 @@
     font-size: 0.85em;
     color: #666;
 }
+.login__agree input{
+    width: auto;
+}
 
 .login__my-account {
     text-align: center;

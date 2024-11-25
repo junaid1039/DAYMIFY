@@ -32,14 +32,6 @@ const Pi = () => {
                     <span className="pi-label">Email:</span>
                     <span className="pi-value">{userData ? userData.email : "Loading..."}</span>
                 </div>
-                <div className="pi-field">
-                    <span className="pi-label">Phone:</span>
-                    <span className="pi-value">{userData ? userData.phone : "Loading..."}</span>
-                </div>
-                <div className="pi-field">
-                    <span className="pi-label">Address:</span>
-                    <span className="pi-value">{userData ? userData.address : "Loading..."}</span>
-                </div>
             </div>
         </div>
     );
