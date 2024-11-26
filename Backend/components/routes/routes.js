@@ -104,7 +104,7 @@ router.delete('/deleteuser/:id', multiAuth, userController.deleteUser); // Delet
 
 
 // Order Routes
-router.post('/confirmorder', userauth, orderController.newOrder); // Places an order
+router.post('/confirmorder', orderController.newOrder); // Places an order
 //get all orders
 router.get('/allorders', multiAuth, orderController.getAllOrders); // Retrieves all orders for a user
 //order details

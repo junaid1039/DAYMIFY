@@ -179,6 +179,14 @@ const Orderdetails = ({ onClose, oid, onStatusUpdate }) => {
         <h3>Shipping Info</h3>
         <div className="shipping-row">
           <div className="shipping-field">
+            <div className="user-info1">
+              <label>User Info</label>
+              <div className="info__sub">
+              <label>Name:</label> <p>{shippingInfo.name}</p>
+              <label>Email:</label> <p className='sh_mail'>{shippingInfo.email}</p>
+              </div>
+            </div>
+
             <label htmlFor="address">Address</label>
             <input
               id="address"

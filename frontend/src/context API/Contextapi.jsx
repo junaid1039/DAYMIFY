@@ -278,7 +278,6 @@ const ContextProvider = (props) => {
     //handle paymentsubmit
     // Handle Payment Submit (fixed)
     const handlePaymentSubmit = (navigate, setError, paymentMethod) => {
-        // Check if payment method and shipping info are provided
         if (!paymentMethod) {
             setError('Please select a payment method to proceed.');
             return;
@@ -289,43 +288,45 @@ const ContextProvider = (props) => {
         }
         setError(''); // Clear previous errors
     
-        // Create order data
+        const userIdFromSession = sessionStorage.getItem('userId');
+        const userId = userIdFromSession || null; // Use `null` if no user ID is available
+    
+        if (!userIdFromSession) {
+            console.warn("User is placing an order without logging in.");
+        }
+    
         const orderData = {
-            user: sessionStorage.getItem('userId'), // Assuming you have the user's ID
+            user: userId, // Null if user is not logged in
             orderItems: Object.keys(cart).map(itemId => {
                 const quantity = cart[itemId].quantity;
                 const productInfo = allproducts.find(product => product.id === Number(itemId));
                 return {
                     product: productInfo ? productInfo._id : null,
-                    productId: productInfo ? productInfo.id : '', // Include productId here
+                    productId: productInfo ? productInfo.id : '', 
                     name: productInfo ? productInfo.name : '',
                     quantity,
                     price: productInfo ? productInfo.newprice : 0,
                     image: productInfo ? productInfo.images[0] : '',
-                    color: cart[itemId]?.color, // Add color here
+                    color: cart[itemId]?.color,
                     size: cart[itemId]?.size,
                 };
-            }).filter(item => item.product !== null && item.quantity > 0), // Only include valid products with quantity > 0
-    
+            }).filter(item => item.product !== null && item.quantity > 0),
             shippingInfo: shippingInfo,
-    
             paymentInfo: {
-                method: paymentMethod, // Use the correct variable for payment method
-                id: '123', // Assuming you'll set this when payment is confirmed
-                status: 'COD', // Initial status can be set as pending
+                method: paymentMethod,
+                id: '123', // Dummy value for now
+                status: 'COD',
                 paidAt: Date.now()
             },
-            orderStatus: 'Processing', // Default status of the order
-            totalPrice: getTotalCartAmount(), // Calculate the total price
-            shippingPrice: 0, // Set shipping price if applicable
-            dateOrdered: Date.now() // Automatically set the order creation date
+            orderStatus: 'Processing',
+            totalPrice: getTotalCartAmount(),
+            shippingPrice: 0,
+            dateOrdered: Date.now()
         };
     
-        // Send order data to the server
         fetch(`${baseurl}/confirmorder`, {
             method: 'POST',
             headers: {
-                'auth-token': sessionStorage.getItem('auth-token'),
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(orderData),
@@ -335,14 +336,15 @@ const ContextProvider = (props) => {
                 if (data.success) {
                     navigate('/ordersuccess');
                 } else {
-                    console.log("Failed to confirm order", data.message || data); // Log the error message from server
+                    console.log("Failed to confirm order", data.message || data);
                 }
             })
             .catch(error => {
-                console.error("Error while confirming the order:", error); // Log the error for debugging
+                console.error("Error while confirming the order:", error);
                 alert('Error while confirming the order.');
             });
     };
+    
     
 
 

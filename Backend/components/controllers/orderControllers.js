@@ -9,8 +9,9 @@ function newId() {
 // Create new order
 const newOrder = async (req, res) => {
     const {
+        user, // Optional user ID
         shippingInfo,
-        orderItems, // This should include productId
+        orderItems,
         paymentInfo,
         totalPrice,
         shippingPrice
@@ -18,39 +19,31 @@ const newOrder = async (req, res) => {
 
     try {
         let orderId;
-        // Ensure unique order ID
         do {
             orderId = newId();
         } while (await Order.findOne({ orderId }));
 
-        // Include productId in orderItems
-        const updatedOrderItems = orderItems.map(item => ({
-            productId: item.productId, // Add productId from the request
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price,
-            image: item.image,
-            color: item.color, // Keep existing fields
-            size: item.size   // Keep existing fields
-        }));
-
-        const order = await Order.create({
+        const orderData = {
             orderId,
+            user: user || null, // Use null if no user is provided
             shippingInfo,
-            orderItems: updatedOrderItems,
+            orderItems,
             paymentInfo,
-            orderStatus: "Processing",
+            orderStatus: 'Processing',
             totalPrice,
             shippingPrice,
-            user: req.user.id,
-        });
+            dateOrdered: Date.now()
+        };
+
+        const order = await Order.create(orderData);
 
         res.status(201).json({ success: true, order });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to create order', error: error.message });
-        console.log(error);
+        console.error(error);
     }
 };
+
 
 
 // Get all orders -- Admin

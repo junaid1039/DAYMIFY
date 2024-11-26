@@ -118,6 +118,15 @@ h2, h3 {
 .shipping-info {
   margin-top: 15px;
 }
+.user-info1{
+  width: 100%;
+}
+.info__sub{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 .shipping-row {
   display: flex;
@@ -161,5 +170,8 @@ h2, h3 {
 
   body {
     font-size: 12px;
+  }
+  .info__sub p:last-child{
+    display: none;
   }
 }
