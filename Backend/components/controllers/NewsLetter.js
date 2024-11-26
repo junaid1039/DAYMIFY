@@ -8,7 +8,6 @@ exports.subscribeUser = async (req, res) => {
         return res.status(400).json({ error: "Name and email are required." });
     }
 
-    
     try {
         // Check if the email is already subscribed
         const existingSubscriber = await Newsletter.findOne({ email });
