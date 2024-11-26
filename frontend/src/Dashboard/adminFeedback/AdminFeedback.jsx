@@ -90,7 +90,7 @@ const AdminFeedback = () => {
             <div key={feedback._id} className="feedback-item">
               <div className="feedback-header">
                 <div className="feedback-username">
-                  <span className="feedback-label">Username:</span>{' '}
+                  <span className="feedback-label">Name:</span>{' '}
                   {feedback.userName || 'Anonymous'}
                 </div>
                 <div className="feedback-rating">{renderStars(feedback.rating)}</div>
