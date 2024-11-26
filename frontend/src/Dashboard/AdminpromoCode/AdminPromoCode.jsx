@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './adminPromoCode.css';
 
+
 const AdminPromoCode = () => {
   const [promoCodes, setPromoCodes] = useState([]);
   const [newCode, setNewCode] = useState('');
