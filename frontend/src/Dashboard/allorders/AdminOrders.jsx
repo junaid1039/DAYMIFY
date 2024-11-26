@@ -131,7 +131,7 @@ const AdminOrders = () => {
                                         {order.orderStatus}
                                     </span>
                                 </td>
-                                <td>${order.totalPrice.toFixed(2)}</td>
+                                <td>PKR {order.totalPrice.toFixed(2)}</td>
                                 <td>
                                     <button onClick={() => viewOrderDetails(order.orderId)} className="o-db">
                                         <LuPencilLine />

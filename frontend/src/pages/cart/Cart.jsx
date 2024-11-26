@@ -151,14 +151,26 @@ const Cart = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="cartitem-total">
               <div>
                 <div className="ct-item">
                   <p>Subtotal</p>
-                  <p>{currencySymbol}{totalCartAmount.toFixed(0)}</p>
+                  <p>{currencySymbol}
+                    {discount > 0
+                      ? (totalCartAmount / (1 - discount / 100)).toFixed(0) // Recalculate original value
+                      : totalCartAmount.toFixed(0)} {/* Use totalCartAmount if no discount */}</p>
                 </div>
                 <hr />
+                {discount > 0 && (
+                  <>
+                    <div className="ct-item">
+                      <p>Discount ({discount}%)</p>
+                      <p>-{currencySymbol}{(totalCartAmount * (discount / 100)).toFixed(0)}</p>
+                    </div>
+                    <hr />
+                  </>
+                )}
                 <div className="ct-item">
                   <p>Shipping Fee</p>
                   <p>Free</p>
@@ -166,7 +178,9 @@ const Cart = () => {
                 <hr />
                 <div className="ct-item">
                   <h3>Total</h3>
-                  <h3>{currencySymbol}{totalCartAmount.toFixed(0)}</h3>
+                  <h3>
+                    {currencySymbol}{totalCartAmount.toFixed(0)}
+                  </h3>
                 </div>
               </div>
               <Link to='/cart/checkout' className='cl'>
@@ -175,6 +189,7 @@ const Cart = () => {
                 </button>
               </Link>
             </div>
+
           </div>
         </div>
       </div>

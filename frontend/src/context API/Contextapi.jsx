@@ -508,6 +508,7 @@ const ContextProvider = (props) => {
 
     // context values to export .
     const contextvalues = {
+        discount,
         allproducts,
         Adminproducts,
         isLoggedIn,
