@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './adminFeedback.css';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'; // Icons for stars
+import { IoPersonCircleOutline, IoPersonCircleSharp } from "react-icons/io5";
+
+
 
 const AdminFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -90,8 +93,8 @@ const AdminFeedback = () => {
             <div key={feedback._id} className="feedback-item">
               <div className="feedback-header">
                 <div className="feedback-username">
-                  <span className="feedback-label">Name:</span>{' '}
-                  {feedback.userName || 'Anonymous'}
+                  <span className="feedback-label">{<IoPersonCircleOutline/>}</span>
+                  <span>{feedback.userName || 'Anonymous'} </span>
                 </div>
                 <div className="feedback-rating">{renderStars(feedback.rating)}</div>
               </div>
