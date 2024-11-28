@@ -28,7 +28,7 @@ const Productlist = () => {
         setLoading(false);
       }
     };
-    
+
     loadProducts();
   }, []); // Dependency on fnadminproducts
 
@@ -77,15 +77,15 @@ const Productlist = () => {
           Adminproducts.map((product) => (
             <React.Fragment key={product.id}>
               <div className="listproduct-format-main listproduct-format">
-                <img 
-                  src={product.images.length > 0 ? product.images[0] : 'default-image-url.jpg'} 
-                  alt={product.name} 
-                  className="listproduct-product-img" 
+                <img
+                  src={product.images.length > 0 ? product.images[0] : 'default-image-url.jpg'}
+                  alt={product.name}
+                  className="listproduct-product-img"
                 />
-                <p>{product.name}</p>
-                <p>{product.prices["PKR"].oldprice}</p>
-                <p>{product.prices["PKR"].newprice}</p>
-                <p>{product.category}</p>
+                <p>{product.name || 'Unnamed Product'}</p>
+                <p>Pkr{product.prices?.PKR?.oldprice?.toFixed(2) || 'N/A'}</p>
+                <p>Pkr{product.prices?.PKR?.newprice?.toFixed(2) || 'N/A'}</p>
+                <p>{product.category || 'Uncategorized'}</p>
                 <p>
                   <RiEdit2Fill onClick={() => navigate(`editproduct/${product.id}`)} className="edit-icon" />
                   <RiDeleteBin5Line onClick={() => handleDeleteClick(product.id)} className="delete-icon" />
