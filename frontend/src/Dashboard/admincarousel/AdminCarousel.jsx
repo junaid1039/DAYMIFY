@@ -118,6 +118,7 @@ const AdminCarousel = () => {
     return (
         <div className="admin-carousel-container">
             <h1>Carousel Management</h1>
+            <h2>900x1080</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="file"
