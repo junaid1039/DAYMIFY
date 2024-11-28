@@ -16,7 +16,7 @@ const AdminCarousel = () => {
 
     useEffect(() => {
         const loadCarousels = async () => {
-            const fetchedCarousels = await fetchCarousels(); 
+            const fetchedCarousels = await fetchCarousels();  
             setCarousels(fetchedCarousels);
         };
         loadCarousels();
