@@ -4,7 +4,7 @@ import './adminPromoCode.css';
 
 const AdminPromoCode = () => {
   const [promoCodes, setPromoCodes] = useState([]);
-  const [newCode, setNewCode] = useState('');
+  const [newCode, setNewCode] = useState(''); 
   const [discount, setDiscount] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [promoCodeToValidate, setPromoCodeToValidate] = useState('');
