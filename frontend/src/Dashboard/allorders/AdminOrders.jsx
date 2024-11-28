@@ -15,6 +15,7 @@ const AdminOrders = () => {
     const [deleting, setDeleting] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState(null);
+    const [deleteInput, setDeleteInput] = useState('');
 
     const loadOrders = useCallback(async () => {
         setLoading(true);
@@ -42,9 +43,9 @@ const AdminOrders = () => {
     };
 
     const confirmDeleteOrder = (id) => {
-        console.log("here is the id", id);
         setOrderToDelete(id);
         setShowConfirmDelete(true);
+        setDeleteInput(''); // Reset input field when the modal opens
     };
 
     const deleteOrder = async () => {
@@ -160,10 +161,27 @@ const AdminOrders = () => {
                 <div className="confirm-delete-overlay">
                     <div className="confirm-delete-modal">
                         <h3>Confirm Deletion</h3>
-                        <p>Are you sure you want to delete this order?</p>
+                        <p>To confirm deletion, please type <strong>delete</strong> in the box below:</p>
+                        <input
+                            type="text"
+                            placeholder="Type 'delete' to confirm"
+                            value={deleteInput}
+                            onChange={(e) => setDeleteInput(e.target.value)}
+                        />
                         <div className="modal-buttons">
-                            <button className="confirm-button" onClick={deleteOrder}>Confirm</button>
-                            <button className="cancel-button" onClick={() => setShowConfirmDelete(false)}>Cancel</button>
+                            <button
+                                className="confirm-button"
+                                onClick={deleteOrder}
+                                disabled={deleteInput.toLowerCase() !== 'delete'}
+                            >
+                                Confirm
+                            </button>
+                            <button
+                                className="cancel-button"
+                                onClick={() => setShowConfirmDelete(false)}
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -176,6 +176,9 @@
   margin-bottom: 20px;
   font-size: 1.1rem;
 }
+.confirm-delete-modal input{
+  margin-bottom: 20px;
+}
 
 .modal-buttons {
   display: flex;
