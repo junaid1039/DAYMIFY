@@ -117,6 +117,7 @@ const AdminCarousel = () => {
 
     return (
         <div className="admin-carousel-container">
+            <h1>Carousel Management</h1>
             <form onSubmit={handleSubmit}>
                 <label>Image Dimensions (1920 x 1080)</label>
                 <input
