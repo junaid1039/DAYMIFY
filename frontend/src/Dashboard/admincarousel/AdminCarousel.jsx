@@ -117,12 +117,14 @@ const AdminCarousel = () => {
 
     return (
         <div className="admin-carousel-container">
-            <h1>Carousel Management</h1>
+            <h1>Carousel Management</h1><h4>(1920x1080)</h4>
+            
             <form onSubmit={handleSubmit}>
                 <label>Image Dimensions (1920 x 1080)</label>
                 <input
                     type="file"
                     multiple
+                    placeholder="(1920x1080)"
                     accept="image/*"
                     onChange={(e) => setImageFiles(Array.from(e.target.files))}
                     required
