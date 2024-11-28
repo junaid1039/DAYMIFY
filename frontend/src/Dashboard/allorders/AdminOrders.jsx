@@ -132,7 +132,7 @@ const AdminOrders = () => {
                                     </span>
                                 </td>
                                 <td>PKR {order.totalPrice.toFixed(2)}</td>
-                                <td>
+                                <td className='m-o-db'>
                                     <button onClick={() => viewOrderDetails(order.orderId)} className="o-db">
                                         <LuPencilLine />
                                     </button>

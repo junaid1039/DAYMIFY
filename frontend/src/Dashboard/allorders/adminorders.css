@@ -103,11 +103,16 @@
 
 .o-db svg {
   font-size: 1.1em;
+  
 }
 
 .o-db:hover {
   background-color: #444;
   color: white;
+}
+.m-o-db{
+  display: flex;
+  gap: 10px;
 }
 
 .save-button:hover,
@@ -174,7 +179,7 @@
 
 .modal-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .button {
