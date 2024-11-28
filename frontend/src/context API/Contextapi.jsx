@@ -410,28 +410,31 @@ const ContextProvider = (props) => {
         }
     };
 
-
-
-
-    // Confirm product removal
-    const confirmDelete = async (productToDelete, setShowModal) => {
+//confirm detete function
+    const confirmDelete = async (productToDelete) => {
         try {
-            await fetch(`${baseurl}/removeproduct`, {
+            const response = await fetch(`${baseurl}/removeproduct`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     'auth-token': `${sessionStorage.getItem('auth-token')}`,
                 },
-                body: JSON.stringify({ id: productToDelete })
+                body: JSON.stringify({ id: productToDelete }),
             });
-            fnadminproducts(); // Refresh the product list
-            setShowModal(false); // Close the modal
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete product');
+            }
+    
+            const updatedProducts = await fnadminproducts(); // Fetch updated product list
+            return updatedProducts; // Return the updated products to the caller
         } catch (error) {
             console.error('Failed to remove product:', error);
-            setShowModal(false);
+            throw error; // Let the caller handle the error
         }
     };
+    
 
 
     //fetch orders

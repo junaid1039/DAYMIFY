@@ -39,15 +39,14 @@ const Productlist = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await confirmDelete(productToDelete); // Delete the product
-      setShowModal(false);
-      // Optionally refresh the product list
-      const products = await fnadminproducts(); // Fetch updated product list
-      setAdminProducts(products); // Update state with new products
+        const updatedProducts = await confirmDelete(productToDelete); // Pass product ID
+        setShowModal(false);
+        setAdminProducts(updatedProducts.data.products); // Update state with new products
     } catch (err) {
-      setError(err.message);
+        setError(err.message);
     }
-  };
+};
+
 
   if (loading) {
     return <Adminloader />;
