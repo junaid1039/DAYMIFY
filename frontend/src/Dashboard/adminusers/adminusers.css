@@ -47,6 +47,10 @@
     background-color: #f1f5f8;
     transition: background-color 0.3s ease;
 }
+.table-row td:last-child{
+    display: flex;
+    gap: 20px;
+}
 
 .edit-button, 
 .delete-button,
@@ -140,6 +144,9 @@ input[type="email"] {
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+}
+.confirm-delete input{
+    margin-bottom: 20px;
 }
 
 .confirm-button:hover {

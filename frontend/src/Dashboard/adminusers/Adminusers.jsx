@@ -13,6 +13,7 @@ const AdminUsers = () => {
     const [editingUserId, setEditingUserId] = useState(null);
     const [editUser, setEditUser] = useState({ name: '', email: '', role: '', allowComponents: [] });
     const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+    const [deleteConfirmationText, setDeleteConfirmationText] = useState(""); // State for delete confirmation text
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
 
@@ -52,7 +53,7 @@ const AdminUsers = () => {
             name: user.name,
             email: user.email,
             role: user.role,
-            allowComponents: user.allowComponents || [] // This will pre-populate the components checkboxes
+            allowComponents: user.allowComponents || []
         });
     }, []);
 
@@ -67,28 +68,39 @@ const AdminUsers = () => {
 
     // Delete API
     const confirmDelete = useCallback(async () => {
+        if (deleteConfirmationText.toLowerCase() !== "delete") {
+            alert("Please type 'delete' to confirm.");
+            return;
+        }
+
         try {
             const res = await fetch(`${baseurl}/deleteuser/${confirmDeleteId}`, {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'auth-token': `${sessionStorage.getItem('auth-token')}`
-                }
+                    "Content-Type": "application/json",
+                    "auth-token": `${sessionStorage.getItem("auth-token")}`,
+                },
             });
             const data = await res.json();
             if (data.success) {
-                setUsers((prevUsers) => prevUsers.filter(user => user._id !== confirmDeleteId));
+                setUsers((prevUsers) => prevUsers.filter((user) => user._id !== confirmDeleteId));
             } else {
-                console.error('Error deleting user:', data.message);
+                console.error("Error deleting user:", data.message);
             }
             setConfirmDeleteId(null);
+            setDeleteConfirmationText(""); // Reset the confirmation text
         } catch (error) {
-            console.error('Error deleting user:', error);
+            console.error("Error deleting user:", error);
         }
-    }, [baseurl, confirmDeleteId]);
+    }, [baseurl, confirmDeleteId, deleteConfirmationText]);
 
     const cancelDelete = useCallback(() => {
         setConfirmDeleteId(null);
+        setDeleteConfirmationText(""); // Reset the confirmation text
+    }, []);
+
+    const handleDeleteInputChange = useCallback((e) => {
+        setDeleteConfirmationText(e.target.value);
     }, []);
 
     const handleInputChange = useCallback((e) => {
@@ -187,8 +199,20 @@ const AdminUsers = () => {
             {/* Confirmation Dialog */}
             {confirmDeleteId && (
                 <div className="confirm-delete">
-                    <p>Are you sure you want to delete?</p>
-                    <button onClick={confirmDelete} className="confirm-button">Yes</button>
+                    <p>Are you sure you want to delete this user? Type "delete"</p>
+                    <input
+                        type="text"
+                        value={deleteConfirmationText}
+                        onChange={handleDeleteInputChange}
+                        placeholder='Type "delete" to confirm'
+                    />
+                    <button
+                        onClick={confirmDelete}
+                        className="confirm-button"
+                        disabled={deleteConfirmationText.toLowerCase() !== "delete"}
+                    >
+                        Yes
+                    </button>
                     <button onClick={cancelDelete} className="cancel-button">No</button>
                 </div>
             )}
@@ -216,7 +240,7 @@ const AdminUsers = () => {
                         <option value="User">User</option>
                         <option value="Admin">Admin</option>
                         <option value="Editor">Editor</option>
-                        <option value="Marketer">Markter</option>
+                        <option value="Marketer">Marketer</option>
                         <option value="Shipper">Shipper</option>
                         <option value="Auditor">Auditor</option>
                     </select>
@@ -229,7 +253,7 @@ const AdminUsers = () => {
                                 <input
                                     type="checkbox"
                                     value={component}
-                                    checked={editUser.allowComponents.includes(component)} // Checks if the component is selected
+                                    checked={editUser.allowComponents.includes(component)}
                                     onChange={handleComponentChange}
                                 />
                                 <label>{component}</label>
