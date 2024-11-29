@@ -12,7 +12,7 @@ const AdminPromoCode = () => {
 
   const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
-  // Fetch promo codes on component mount
+  // Fetch promo codes on component mount 
   useEffect(() => {
     const fetchPromoCodes = async () => {
       try {
