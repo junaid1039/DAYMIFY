@@ -283,7 +283,7 @@ const EditProduct = () => {
                     )}
                 </div>
             </div>
-            <div className="btn-div">
+            <div className="addproduct-itemfield">
                 <label>Upload Images</label>
                 <input
                     type="file"
