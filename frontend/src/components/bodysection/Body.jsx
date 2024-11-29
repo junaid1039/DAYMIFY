@@ -8,7 +8,7 @@ const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
 const Body = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const [popupData, setPopupData] = useState(null);
+  const [popupData, setPopupData] = useState(null); 
 
   useEffect(() => {
     const fetchActivePopups = async () => {
