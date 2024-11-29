@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './checkout.css';
-import { Country, State } from 'country-state-city'; 
+import { Country, State } from 'country-state-city';
 import { FaHome } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { Context } from '../../context API/Contextapi';
 import Stepper from '../../components/stepper/Stepper'
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 
 
 const Checkout = ({ user }) => {
-    const { getTotalCartAmount,userinfo,handleShippingSubmit } = useContext(Context);
+    const { getTotalCartAmount, userinfo, handleShippingSubmit } = useContext(Context);
     const [currentStep] = useState(2);
     // Load from local storage if available
     const savedShippingInfo = JSON.parse(localStorage.getItem('shippingInfo')) || {};
@@ -47,7 +49,7 @@ const Checkout = ({ user }) => {
     useEffect(() => {
         // Fetch user info when the component mounts
         const UserInfo = async () => {
-            const data = await userinfo(); 
+            const data = await userinfo();
             setName(data.name);
             setEmail(data.email);
         };
@@ -69,138 +71,139 @@ const Checkout = ({ user }) => {
 
     return (
         <>
-        <Stepper currentStep={currentStep} />
-        <div className="checkout">
-            {/* If saved address exists, show option to use it */}
-            {useSavedAddress ? (
-                <div className="saved-address-box">
-                    <h4>Saved Address</h4>
-                    <p>{name}</p>
-                    <p>{email}</p>
-                    <p>{address}</p>
-                    <p>{city}, {state}, {country}</p>
-                    <p>{postcode}</p>
-                    <p>{phone}</p>
-                    <button onClick={() => setUseSavedAddress(false)}>Edit Address</button>
-                </div>
-            ) : (
-                <div className="shippingbox">
-                    <h4>Shipping Address</h4>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
+            <Stepper currentStep={currentStep} />
+            <div className="checkout">
+                {/* If saved address exists, show option to use it */}
+                {useSavedAddress ? (
+                    <div className="saved-address-box">
+                        <h4>Saved Address</h4>
+                        <p>{name}</p>
+                        <p>{email}</p>
+                        <p>{address}</p>
+                        <p>{city}, {state}, {country}</p>
+                        <p>{postcode}</p>
+                        <p>{phone}</p>
+                        <button onClick={() => setUseSavedAddress(false)}>Edit Address</button>
                     </div>
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <FaHome />
-                        <input
-                            type="text"
-                            placeholder="Address"
-                            required
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="City"
-                            required
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="tel"
-                            placeholder="+923021725822"
-                            required
-                            value={phone}
-                            onChange={(e) => setphone(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="number"
-                            placeholder="Postal code"
-                            required
-                            value={postcode}
-                            onChange={(e) => setPostcode(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <select
-                            value={country}
-                            required
-                            onChange={(e) => setcountry(e.target.value)}
-                        >
-                            <option value="">Select Country</option>
-                            {Country &&
-                                Country.getAllCountries().map((item) => (
-                                    <option key={item.isoCode} value={item.isoCode}>
-                                        {item.name}
-                                    </option>
-                                ))}
-                        </select>
-                    </div>
-                    {country && (
+                ) : (
+                    <div className="shippingbox">
+                        <h4>Shipping Address</h4>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Name"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <FaHome />
+                            <input
+                                type="text"
+                                placeholder="Address"
+                                required
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="City"
+                                required
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <PhoneInput
+                                country={country.toLowerCase()} // Set default country based on selected country
+                                value={phone}
+                                onChange={(phone) => setphone(phone)} // Update the phone state with the full number
+                                placeholder="Enter phone number"
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="number"
+                                placeholder="Postal code"
+                                required
+                                value={postcode}
+                                onChange={(e) => setPostcode(e.target.value)}
+                            />
+                        </div>
                         <div>
                             <select
-                                value={state}
+                                value={country}
                                 required
-                                onChange={(e) => setstate(e.target.value)}
+                                onChange={(e) => setcountry(e.target.value)} // This will now save the country name
                             >
-                                <option value="">Select State</option>
-                                {State &&
-                                    State.getStatesOfCountry(country).map((item) => (
-                                        <option key={item.isoCode} value={item.isoCode}>
+                                <option value="">Select Country</option>
+                                {Country &&
+                                    Country.getAllCountries().map((item) => (
+                                        <option key={item.isoCode} value={item.name}>
                                             {item.name}
                                         </option>
                                     ))}
                             </select>
                         </div>
-                    )}
-                    <button className='sa' onClick={() => setUseSavedAddress(true)}>Save Address</button>
-                </div>
-            )}
-
-            <div className="ch-right">
-                <div className="cartitem-total">
-                    <div>
-                        <div className="ct-item">
-                            <p>Subtotal</p>
-                            <p>${getTotalCartAmount()}</p>
-                        </div>
-                        <hr />
-                        <div className="ct-item">
-                            <p>Shipping Fee</p>
-                            <p>Free</p>
-                        </div>
-                        <hr />
-                        <div className="ct-item">
-                            <h3>Total</h3>
-                            <h3>${getTotalCartAmount()}</h3>
-                        </div>
+                        {country && (
+                            <div>
+                                <select
+                                    value={state}
+                                    required
+                                    onChange={(e) => setstate(e.target.value)} // This will still save the state name
+                                >
+                                    <option value="">Select State</option>
+                                    {State &&
+                                        State.getStatesOfCountry(
+                                            Country.getAllCountries().find(c => c.name === country)?.isoCode // Get states based on country name
+                                        ).map((item) => (
+                                            <option key={item.isoCode} value={item.name}>
+                                                {item.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+                        )}
+                        <button className='sa' onClick={() => setUseSavedAddress(true)}>Save Address</button>
                     </div>
-                    <Link to='payment' className='cl'>
-                        <button onClick={()=>handleShippingSubmit(shippingInfo)} >Continue</button>
-                    </Link>
+                )}
+
+                <div className="ch-right">
+                    <div className="cartitem-total">
+                        <div>
+                            <div className="ct-item">
+                                <p>Subtotal</p>
+                                <p>${getTotalCartAmount()}</p>
+                            </div>
+                            <hr />
+                            <div className="ct-item">
+                                <p>Shipping Fee</p>
+                                <p>Free</p>
+                            </div>
+                            <hr />
+                            <div className="ct-item">
+                                <h3>Total</h3>
+                                <h3>${getTotalCartAmount()}</h3>
+                            </div>
+                        </div>
+                        <Link to='payment' className='cl'>
+                            <button onClick={() => handleShippingSubmit(shippingInfo)} >Continue</button>
+                        </Link>
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     );
 };

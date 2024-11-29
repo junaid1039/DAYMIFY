@@ -295,7 +295,7 @@ const EditProduct = () => {
             </div>
             {loading && <p>Loading...</p>}
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-            <button onClick={editProduct}>Update Product</button>
+            <button onClick={editProduct} className='addproduct-btn'>Update Product</button>
         </div>
     );
 };

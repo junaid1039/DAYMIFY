@@ -26,6 +26,10 @@
     background-color: #444;
     color: white;
 }
+.payment-option.selected p{
+
+    color: white;
+}
 
 .payment-option p {
     margin-top: 10px;
