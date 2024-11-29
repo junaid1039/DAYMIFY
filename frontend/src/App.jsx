@@ -12,7 +12,7 @@ export const App = () => {
   return (
     <ContextProvider>
     <BrowserRouter>
-      <Routes>
+      <Routes> 
         {/* User layout for all user-related routes */}
         <Route path="/*" element={<UserLayout />} />
 
