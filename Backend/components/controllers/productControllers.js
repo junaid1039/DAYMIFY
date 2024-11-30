@@ -125,9 +125,12 @@ const removeProduct = async (req, res) => {
         }
 
         if (Array.isArray(product.images)) {
-            const imageDeletionPromises = product.images.map(image =>
-                cloudinary.uploader.destroy(image)
-            );
+            // Delete images from Cloudinary using their URLs
+            const imageDeletionPromises = product.images.map(imageUrl => {
+                // Extract public ID from the Cloudinary URL
+                const publicId = extractPublicIdFromUrl(imageUrl);
+                return cloudinary.uploader.destroy(publicId);
+            });
             await Promise.all(imageDeletionPromises);
         }
 
@@ -138,6 +141,15 @@ const removeProduct = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
+
+// Function to extract public ID from Cloudinary URL
+const extractPublicIdFromUrl = (url) => {
+    const parts = url.split('/');
+    const fileNameWithExtension = parts[parts.length - 1]; // Get last part, e.g., 'ahg4isiwal25k7exewmg.jpg'
+    const publicId = fileNameWithExtension.split('.')[0]; // Remove the extension to get the public ID
+    return publicId;
+};
+
 
 // Get all products for admin (no currency filtering, showing all data)
 const adminAllProducts = async (req, res) => {

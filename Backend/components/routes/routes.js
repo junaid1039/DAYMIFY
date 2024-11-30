@@ -16,6 +16,8 @@ const { subscribeUser, getAllSubscribers, unsubscribeUser,delsubscriber } = requ
 const feedbackController = require('../controllers/feedbackController');
 
 
+//All the API Routes are Defined Below.
+
 router.get('/feedbacks', feedbackController.getAllFeedbacks);
 router.post('/feedback', feedbackController.addFeedback); // Add feedback for an order
 router.get('/feedback/:productId', feedbackController.getFeedbacksByProductId); // Get feedbacks by productId
