@@ -16,6 +16,10 @@
     max-width: 100%; 
     box-sizing: border-box; 
 }
+.required,.error-text{
+    font-family: sans-serif;
+    color: red;
+}
 
 .shippingbox input, 
 .shippingbox select {
