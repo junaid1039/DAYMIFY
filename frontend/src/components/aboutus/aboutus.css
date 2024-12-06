@@ -35,3 +35,8 @@ ul {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+@media(max-width: 500px){
+    .team{
+        flex-direction: column;
+    }
+}
