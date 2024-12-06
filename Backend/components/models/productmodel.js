@@ -5,15 +5,20 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     images: [{ type: String, required: true }],
     category: { type: String, required: true },
-    colors: [{ type: String }],
-    sizes: [{ type: String }],
+    colors: [{
+        color: { type: String },
+        available: { type: Boolean, default: true }  // Availability for this color
+    }],
+    sizes: [{
+        size: { type: String },
+        available: { type: Boolean, default: true }  // Availability for this size
+    }],
     description: { type: String, required: true },
     brand: { type: String },
     date: { type: Date, default: Date.now },
-    available: { type: Boolean, default: true },
+    available: { type: Boolean, default: true, required: true },
     visible: { type: Boolean, required: true },
 
-    // New field for multi-currency pricing with old and new prices
     prices: {
         USD: {
             oldprice: { type: Number },

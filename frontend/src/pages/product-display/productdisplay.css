@@ -11,6 +11,10 @@
     align-items: center;
     gap: 15px;
 }
+.out-of-stock{
+    color: red;
+    font-family: sans-serif;
+}
 
 .product-display__main-img {
     max-width: 27em; /* Adjust max-width as needed */

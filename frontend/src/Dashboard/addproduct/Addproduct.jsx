@@ -4,7 +4,6 @@ import { IoMdCloudUpload } from "react-icons/io";
 
 const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
-
 const Addproduct = () => {
     const [images, setImages] = useState([]);
     const [productDetails, setProductDetails] = useState({
@@ -19,14 +18,17 @@ const Addproduct = () => {
         },
         description: '',
         brand: '',
-        colors: [],
-        sizes: [],
+        colors: [],  // Array of objects: { color: 'value', available: boolean }
+        sizes: [],   // Array of objects: { size: 'value', available: boolean }
+        available: true,  // Product availability
         visible: false
     });
     const [tempColor, setTempColor] = useState("");
+    const [tempSize, setTempSize] = useState("");
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    // Handle changes in the form fields
     const changeHandler = (e) => {
         const { name, value, type, checked } = e.target;
         setProductDetails(prevDetails => ({
@@ -35,6 +37,7 @@ const Addproduct = () => {
         }));
     };
 
+    // Handle price updates
     const pricesChangeHandler = (e, currency, priceType) => {
         const { value } = e.target;
         setProductDetails(prevDetails => ({
@@ -48,32 +51,49 @@ const Addproduct = () => {
             }
         }));
     };
+
+    // Handle array fields (sizes, colors)
     const arrayHandler = (e, field) => {
-        const value = e.target.value.split(',').map(item => item.trim()); // Split by commas and trim spaces
+        const value = e.target.value.split(',').map(item => item.trim());
         setProductDetails(prevDetails => ({
             ...prevDetails,
             [field]: value
         }));
     };
 
-
+    // Add color to the list
     const addColor = () => {
         if (tempColor) {
             setProductDetails(prevDetails => ({
                 ...prevDetails,
-                colors: [...prevDetails.colors, tempColor]
+                colors: [...prevDetails.colors, { color: tempColor, available: true }]  // default available = true
             }));
-            setTempColor(""); // Reset the temporary color
+            setTempColor(""); // Reset tempColor
         }
     };
+
+    // Add size to the list
+    const addSize = () => {
+        if (tempSize) {
+            setProductDetails(prevDetails => ({
+                ...prevDetails,
+                sizes: [...prevDetails.sizes, { size: tempSize, available: true }]  // default available = true
+            }));
+            setTempSize(""); // Reset tempSize
+        }
+    };
+
+    // Handle image uploads
     const imageHandler = (e) => {
         setImages(Array.from(e.target.files));
     };
 
+    // Handle form submission and adding the product
     const addProduct = async () => {
         setLoading(true);
         setErrorMessage("");
 
+        // Validate form data
         if (!productDetails.name || !productDetails.category || !productDetails.description || images.length === 0) {
             setErrorMessage("Please fill in all required fields and upload at least one image.");
             setLoading(false);
@@ -87,7 +107,7 @@ const Addproduct = () => {
 
         const product = {
             ...productDetails,
-            images: []
+            images: [] // Placeholder for images that will be updated after upload
         };
 
         Object.entries(product).forEach(([key, value]) => {
@@ -95,6 +115,7 @@ const Addproduct = () => {
         });
 
         try {
+            // Upload images
             const uploadResponse = await fetch(`${baseurl}/uploadimage`, {
                 method: 'POST',
                 body: formData,
@@ -102,7 +123,9 @@ const Addproduct = () => {
             const uploadData = await uploadResponse.json();
 
             if (uploadData.success) {
-                product.images = uploadData.data.map(img => img.secure_url);
+                product.images = uploadData.data.map(img => img.secure_url); // Update images with uploaded URLs
+
+                // Add product to the database
                 const addProductResponse = await fetch(`${baseurl}/addproduct`, {
                     method: 'POST',
                     headers: {
@@ -112,6 +135,7 @@ const Addproduct = () => {
                     },
                     body: JSON.stringify(product),
                 });
+
                 const data = await addProductResponse.json();
 
                 if (data.success) {
@@ -143,6 +167,7 @@ const Addproduct = () => {
                     placeholder='Type here'
                 />
             </div>
+
             <div className="addproduct-price">
                 {['USD', 'EUR', 'PKR', 'GBP', 'AED'].map(currency => (
                     <div className="addproduct-itemfield" key={currency}>
@@ -163,6 +188,7 @@ const Addproduct = () => {
                     </div>
                 ))}
             </div>
+
             <div className="addproduct-itemfield">
                 <label>Description</label>
                 <textarea
@@ -173,6 +199,7 @@ const Addproduct = () => {
                     placeholder='Description'
                 />
             </div>
+
             <div className="addproduct-itemfield">
                 <label>Product Category</label>
                 <select
@@ -205,11 +232,12 @@ const Addproduct = () => {
                         placeholder='Brand'
                     />
                 </div>
+
                 <div className="addproduct-itemfield">
                     <label>Colors</label>
                     <div className="color-picker-wrapper">
                         {productDetails.colors.map((color, index) => (
-                            <div key={index} className="color-preview" style={{ backgroundColor: color }} />
+                            <div key={index} className="color-preview" style={{ backgroundColor: color.color }} />
                         ))}
                         <input
                             type="color"
@@ -227,6 +255,25 @@ const Addproduct = () => {
                 </div>
             </div>
 
+            {/* Row for Sizes */}
+            <div className="addproduct-row">
+                <div className="addproduct-itemfield">
+                    <label>Sizes</label>
+                    <input
+                        value={tempSize}
+                        onChange={(e) => setTempSize(e.target.value)}
+                        type="text"
+                        placeholder="Enter size (eg, S/45)"
+                    />
+                    <button
+                        onClick={addSize}
+                        disabled={!tempSize}
+                    >
+                        Add Size
+                    </button>
+                </div>
+            </div>
+
             {/* Row for Visibility */}
             <div className="addproduct-row2">
                 <div className="addproduct-itemfield2">
@@ -240,16 +287,18 @@ const Addproduct = () => {
                 </div>
             </div>
 
-            <div className="addproduct-itemfield">
-                <label>Sizes (comma-separated)</label>
-                <input
-                    value={productDetails.sizes.join(', ')}
-                    onChange={(e) => arrayHandler(e, 'sizes')}
-                    type="text"
-                    placeholder='e.g., S, M, L'
-                />
+            {/* Row for Availability */}
+            <div className="addproduct-row2">
+                <div className="addproduct-itemfield2">
+                    <label>Available</label>
+                    <input
+                        type="checkbox"
+                        name="available"
+                        checked={productDetails.available}
+                        onChange={changeHandler}
+                    />
+                </div>
             </div>
-
 
             <div className="addproduct-itemfield">
                 <div className="image-previews">

@@ -23,7 +23,8 @@ const EditProduct = () => {
         brand: '',
         colors: [],
         sizes: [],
-        visible: false
+        visible: false,
+        available: false
     });
     const [images, setImages] = useState([]); 
     const [existingImages, setExistingImages] = useState([]); 
@@ -38,7 +39,6 @@ const EditProduct = () => {
                 const data = await response.json();
                 if (data.success) {
                     const product = data.product;
-                    
                     setProductDetails({
                         name: product.name,
                         category: product.category,
@@ -54,6 +54,7 @@ const EditProduct = () => {
                         colors: product.colors || [],
                         sizes: product.sizes || [],
                         visible: product.visible || false,
+                        available: product.available || false,
                     });
                     setExistingImages(product.images || []); 
                 } else {
@@ -66,7 +67,7 @@ const EditProduct = () => {
         };
         fetchProductDetails();
     }, [id]);
-    
+
     const changeHandler = (e) => {
         const { name, value, type, checked } = e.target;
         setProductDetails(prevDetails => ({
@@ -74,7 +75,7 @@ const EditProduct = () => {
             [name]: type === 'checkbox' ? checked : value
         }));
     };
-
+    console.log("there", productDetails);
     const pricesChangeHandler = (e, currency, priceType) => {
         const { value } = e.target;
         setProductDetails(prevDetails => ({
@@ -103,6 +104,24 @@ const EditProduct = () => {
     const removeExistingImage = (imageUrl) => {
         setDeletedImages([...deletedImages, imageUrl]);
         setExistingImages(existingImages.filter(img => img !== imageUrl));
+    };
+
+    const handleColorAvailability = (index) => {
+        const updatedColors = [...productDetails.colors];
+        updatedColors[index].available = !updatedColors[index].available;
+        setProductDetails(prevDetails => ({
+            ...prevDetails,
+            colors: updatedColors
+        }));
+    };
+
+    const handleSizeAvailability = (index) => {
+        const updatedSizes = [...productDetails.sizes];
+        updatedSizes[index].available = !updatedSizes[index].available;
+        setProductDetails(prevDetails => ({
+            ...prevDetails,
+            sizes: updatedSizes
+        }));
     };
 
     const uploadImages = async (formData) => {
@@ -238,16 +257,8 @@ const EditProduct = () => {
                         placeholder='Brand'
                     />
                 </div>
-                <div className="addproduct-itemfield">
-                    <label>Colors (comma-separated)</label>
-                    <input
-                        value={productDetails.colors.join(', ')}
-                        onChange={(e) => arrayHandler(e, 'colors')}
-                        type="text"
-                        placeholder='e.g., red, blue, green'
-                    />
-                </div>
             </div>
+            <div className="combine-va">
             <div className="addproduct-row2">
                 <div className="addproduct-itemfield2">
                     <label>Visibility</label>
@@ -259,15 +270,73 @@ const EditProduct = () => {
                     />
                 </div>
             </div>
-            <div className="addproduct-itemfield">
-                <label>Sizes (comma-separated)</label>
-                <input
-                    value={productDetails.sizes.join(', ')}
-                    onChange={(e) => arrayHandler(e, 'sizes')}
-                    type="text"
-                    placeholder='e.g., S, M, L'
-                />
+            <div className="addproduct-row2">
+                <div className="addproduct-itemfield2">
+                    <label>Available</label>
+                    <input
+                        type="checkbox"
+                        name="available"
+                        checked={productDetails.available}
+                        onChange={changeHandler}
+                    />
+                </div>
             </div>
+            </div>
+
+            {/* Colors Input Field with Checkboxes */}
+            <div className="addproduct-itemfield">
+                <label>Colors</label>
+                <div className="color-row">
+                    {productDetails.colors.map((colorObj, index) => (
+                        <div key={index} className="color-item">
+                            <input
+                                type="text"
+                                value={colorObj.color}
+                                onChange={(e) => {
+                                    const updatedColors = [...productDetails.colors];
+                                    updatedColors[index].color = e.target.value;
+                                    setProductDetails({ ...productDetails, colors: updatedColors });
+                                }}
+                                style={{
+                                    backgroundColor: colorObj.color, // Dynamically set background color
+                                }}
+                            />
+                            <input
+                                type="checkbox"
+                                checked={colorObj.available}
+                                onChange={() => handleColorAvailability(index)}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Sizes Input Field with Checkboxes */}
+            <div className="addproduct-itemfield">
+                <label>Sizes</label>
+                <div className="size-row">
+                    {productDetails.sizes.map((sizeObj, index) => (
+                        <div key={index} className="size-item">
+                            
+                            <input
+                                type="text"
+                                value={sizeObj.size}
+                                onChange={(e) => {
+                                    const updatedSizes = [...productDetails.sizes];
+                                    updatedSizes[index].size = e.target.value;
+                                    setProductDetails({ ...productDetails, sizes: updatedSizes });
+                                }}
+                            />
+                            <input
+                                type="checkbox"
+                                checked={sizeObj.available}
+                                onChange={() => handleSizeAvailability(index)}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="addproduct-itemfield">
                 <label>Existing Images</label>
                 <div className="image-preview-container">
@@ -291,10 +360,12 @@ const EditProduct = () => {
                     accept="image/*"
                     multiple
                 />
-                <p><IoMdCloudUpload /> Drag & Drop your images or click to upload</p>
+                <p><IoMdCloudUpload /> click to upload</p>
             </div>
+
             {loading && <p>Loading...</p>}
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
             <button onClick={editProduct} className='addproduct-btn'>Update Product</button>
         </div>
     );

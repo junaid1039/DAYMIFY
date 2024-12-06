@@ -114,7 +114,24 @@ textarea {
 display: flex;
 gap: 2em;
 }
-
+.color-row{
+  display: flex;
+}
+.color-item{
+  display: flex;
+  gap: 10px;
+}
+.size-row{
+  display: flex;
+}
+.size-item{
+  display: flex;
+  gap: 10px;
+}
+.combine-va{
+  display: flex;
+  gap: 60px
+}
 .image-preview-edit {
   position: relative;
   width: 100px;

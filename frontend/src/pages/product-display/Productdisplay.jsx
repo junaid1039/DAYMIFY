@@ -123,6 +123,10 @@ const Productdisplay = ({ product }) => {
 
     const currencySymbol = getCurrencySymbol(product.countryCode);
 
+    // Determine if product is out of stock
+    const isProductOutOfStock = product.available;
+    
+
     return (
         <>
             <div className="product-display">
@@ -166,11 +170,12 @@ const Productdisplay = ({ product }) => {
                             <div className="sizes">
                                 {product.sizes.map((size) => (
                                     <div
-                                        key={size}
-                                        className={`size-option ${selectedSize === size ? 'selected' : ''}`}
-                                        onClick={() => setSelectedSize(size)}
+                                        key={size._id}
+                                        className={`size-option ${selectedSize === size.size ? 'selected' : ''}`}
+                                        onClick={() => size.available && setSelectedSize(size.size)}
+                                        style={{ opacity: size.available ? 1 : 0.5, cursor: size.available ? 'pointer' : 'not-allowed' }}
                                     >
-                                        {size}
+                                        {size.size}
                                     </div>
                                 ))}
                             </div>
@@ -184,19 +189,22 @@ const Productdisplay = ({ product }) => {
                             <div className="colors">
                                 {product.colors.map((color) => (
                                     <div
-                                        key={color}
-                                        className={`color-option ${selectedColor === color ? 'selected' : ''}`}
-                                        style={{ backgroundColor: color }}
-                                        onClick={() => setSelectedColor(color)}
+                                        key={color._id}
+                                        className={`color-option ${selectedColor === color.color ? 'selected' : ''}`}
+                                        style={{ backgroundColor: color.color, opacity: color.available ? 1 : 0.5, cursor: color.available ? 'pointer' : 'not-allowed' }}
+                                        onClick={() => color.available && setSelectedColor(color.color)}
                                     />
                                 ))}
                             </div>
                         </div>
                     )}
 
+                    {/* Out of Stock Message */}
+                    {!isProductOutOfStock && <p className="out-of-stock">Out of Stock</p>}
+
                     <div className="product-display__buttons">
-                        <button onClick={handleAddToCart} disabled={isProcessing}>Add to Cart</button>
-                        <button onClick={handleBuyNow} disabled={isProcessing}>Buy Now</button>
+                        <button onClick={handleAddToCart} disabled={isProcessing || !isProductOutOfStock}>Add to Cart</button>
+                        <button onClick={handleBuyNow} disabled={isProcessing || !isProductOutOfStock}>Buy Now</button>
                     </div>
                     <p className="product-display__category"><span>Category :</span> {product.category}</p>
                     <p className="product-display__tags"><span>Tags :</span> Latest</p>
@@ -216,8 +224,14 @@ Productdisplay.propTypes = {
         name: PropTypes.string.isRequired,
         oldprice: PropTypes.number,
         newprice: PropTypes.number.isRequired,
-        sizes: PropTypes.arrayOf(PropTypes.string),
-        colors: PropTypes.arrayOf(PropTypes.string),
+        sizes: PropTypes.arrayOf(PropTypes.shape({
+            size: PropTypes.string.isRequired,
+            available: PropTypes.bool.isRequired,
+        })),
+        colors: PropTypes.arrayOf(PropTypes.shape({
+            color: PropTypes.string.isRequired,
+            available: PropTypes.bool.isRequired,
+        })),
         category: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         countryCode: PropTypes.string.isRequired,

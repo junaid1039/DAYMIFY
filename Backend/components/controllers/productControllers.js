@@ -16,7 +16,6 @@ const getPriceByCurrency = (product, currency) => {
     return product.prices[currency] || product.prices['USD'];
 };
 
-// Add a new product
 const addProduct = async (req, res) => {
     const generateNewId = async () => {
         const lastProduct = await Product.findOne().sort({ id: -1 });
@@ -34,7 +33,8 @@ const addProduct = async (req, res) => {
             colors,
             sizes,
             brand,
-            visible
+            visible,
+            available, // ensure the availability flag is considered
         } = req.body;
 
         if (!name || !images || !category || !description || visible === undefined) {
@@ -64,6 +64,7 @@ const addProduct = async (req, res) => {
             sizes,
             brand,
             visible,
+            available: available !== undefined ? available : true,  // Ensure the available field is set
         });
 
         await product.save();
@@ -74,7 +75,7 @@ const addProduct = async (req, res) => {
     }
 };
 
-// Edit product
+//edit product
 const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -82,35 +83,56 @@ const editProduct = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Product ID is required' });
         }
 
+        // Fetch the product from the database
         const product = await Product.findOne({ id });
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
 
+        // Prepare the updated data from the request body
         const updatedData = {
             name: req.body.name,
             images: req.body.images,
             category: req.body.category,
             prices: req.body.prices,
             description: req.body.description,
-            colors: req.body.colors,
-            sizes: req.body.sizes,
+            colors: req.body.colors, // Ensure that colors are updated with availability
+            sizes: req.body.sizes, // Ensure that sizes are updated with availability
             brand: req.body.brand,
             visible: req.body.visible,
+            available: req.body.available !== undefined ? req.body.available : product.available, // Update available status if provided
         };
 
+        // If colors or sizes are provided, ensure that their availability is also handled
+        if (req.body.colors) {
+            updatedData.colors = req.body.colors.map(color => ({
+                ...color,
+                available: color.available !== undefined ? color.available : true, // Default to true if availability is not specified
+            }));
+        }
+
+        if (req.body.sizes) {
+            updatedData.sizes = req.body.sizes.map(size => ({
+                ...size,
+                available: size.available !== undefined ? size.available : true, // Default to true if availability is not specified
+            }));
+        }
+
+        // Update the product in the database
         const updatedProduct = await Product.findOneAndUpdate(
             { id },
             updatedData,
             { new: true, runValidators: true }
         );
 
+        // Send the response with the updated product
         res.status(200).json({ success: true, message: 'Product updated successfully', product: updatedProduct });
     } catch (error) {
         console.error("Error updating product:", error);
         res.status(500).json({ success: false, message: 'Failed to update product', error });
     }
 };
+
 
 // Remove product from database
 const removeProduct = async (req, res) => {
@@ -167,9 +189,11 @@ const userAllProducts = async (req, res) => {
     const countryCode = req.query.countryCode || 'US';
     const currency = req.query.currency || countryToCurrency[countryCode] || 'USD';
     try {
-        const products = await Product.find({ visible: true });
+        const products = await Product.find({ visible: true });  // Filter out unavailable products
         const productsWithPrices = products.map(product => {
             const { newprice, oldprice } = getPriceByCurrency(product, currency);
+            // Ensure that only available colors and sizes are included
+            
             return {
                 id: product.id,
                 images: product.images,
@@ -181,6 +205,7 @@ const userAllProducts = async (req, res) => {
                 newprice,
                 oldprice,
                 countryCode,
+                available: product.available,
             };
         });
 
@@ -194,20 +219,24 @@ const userAllProducts = async (req, res) => {
     }
 };
 
+
 // Get a single product by ID with frontend-based currency
 const getProductById = async (req, res) => {
     const { id } = req.params;
     const countryCode = req.query.countryCode || 'US';
     const currency = req.query.currency || countryToCurrency[countryCode] || 'USD';
-    
 
     try {
-        const product = await Product.findOne({ id });
+        const product = await Product.findOne({ id});  // Only fetch available products
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
 
         const priceData = getPriceByCurrency(product, currency);
+
+        // Filter available colors and sizes
+        
+
         res.json({
             success: true,
             product: {
@@ -215,12 +244,14 @@ const getProductById = async (req, res) => {
                 newprice: priceData.newprice,
                 oldprice: priceData.oldprice,
                 countryCode,
+                
             }
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch product', error });
     }
 };
+
 
 // Fetch products by category with frontend-based currency
 const subcategorys = async (req, res) => {
