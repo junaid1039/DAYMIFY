@@ -12,7 +12,7 @@ const AboutUs = () => {
             <p>
                 Our vision is to be the leading provider of [industry/product] by delivering innovative solutions that meet the evolving needs of our customers.
             </p>
-            <h2>Our Mission</h2>
+            <h2>Our Mission</h2> 
             <p>
                 We strive to [your mission details]. Our team    works tirelessly to ensure   customer satisfaction through quality products, exceptional service, and a commitment to excellence.
             </p>
