@@ -7,30 +7,29 @@ const uploadImages = async (req, res) => {
     }
 
     try {
-        const uploadPromises = req.files.map((file) => {
-            return cloudinary.uploader.upload(file.path, {
-                transformation: [
-                    { width: 500, height: 500, crop: "fill" }, // crop to 1:1 aspect ratio
-                    { quality: "auto:good", fetch_format: "auto" } // auto-optimize with good quality and format
-                ],
-            })
-            .then((result) => {
-                // Remove the local file after upload
-                fs.unlinkSync(file.path);
+        const uploadPromises = req.files.map((file) =>
+            cloudinary.uploader.upload(file.path, {
+                quality: "100",               // Full quality (no compression)
+                fetch_format: "auto",         // Smart format (e.g., WebP)
+                resource_type: "image",       // Ensure treated as image
+                use_filename: true,
+                unique_filename: false,
+                overwrite: true
+            }).then((result) => {
+                fs.unlinkSync(file.path);    // Clean local file
                 return result;
-            });
-        });
+            })
+        );
 
-        // Wait for all the uploads to complete
         const uploadResults = await Promise.all(uploadPromises);
 
-        return res.status(200).json({ 
-            success: true, 
-            message: "Images uploaded successfully!",
+        return res.status(200).json({
+            success: true,
+            message: "Images uploaded successfully in full quality!",
             data: uploadResults
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).json({
             success: false,
             message: "Error uploading images"
@@ -38,31 +37,30 @@ const uploadImages = async (req, res) => {
     }
 };
 
-
 const uploadCarousel = async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: "No file uploaded" });
     }
 
     try {
-        // Upload the single file to Cloudinary
         const result = await cloudinary.uploader.upload(req.file.path, {
-            transformation: [
-                //{ width: 500, height: 500, crop: "fill" }, // crop to 1:1 aspect ratio
-                { quality: "auto:good", fetch_format: "auto" } // auto-optimize with good quality and format
-            ],
+            quality: "100",               // Full quality (no compression)
+            fetch_format: "auto",         // Smart format
+            resource_type: "image",       // Force image type
+            use_filename: true,
+            unique_filename: false,
+            overwrite: true
         });
 
-        // Remove the local file after upload
         fs.unlinkSync(req.file.path);
 
-        return res.status(200).json({ 
-            success: true, 
-            message: "Image uploaded successfully!",
+        return res.status(200).json({
+            success: true,
+            message: "Image uploaded successfully in full quality!",
             data: result
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).json({
             success: false,
             message: "Error uploading image"
@@ -70,5 +68,4 @@ const uploadCarousel = async (req, res) => {
     }
 };
 
-
-module.exports = {uploadImages, uploadCarousel};
+module.exports = { uploadImages, uploadCarousel };
