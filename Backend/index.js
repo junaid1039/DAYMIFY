@@ -21,6 +21,7 @@ app.use('/', Routes);
 app.listen(port, (err) => {
     if (!err) {
         console.log("Server is running on " + port);
+        console.log("And Server is Working Fine do teting");
     } else {
         console.log('Error: ' + err);
     }

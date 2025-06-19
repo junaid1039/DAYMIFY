@@ -5,7 +5,7 @@ import { Context } from '../../context API/Contextapi';
 import { useNavigate } from 'react-router-dom';
 import Description from '../../components/description/Description';
 import ProductFeedback from '../../components/productFeedback/ProductFeedback';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'; // Add the star icons for ratings
+import { FaStar, FaStarHalfAlt, FaRegStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const getCurrencySymbol = (currency) => {
     switch (currency) {
@@ -34,18 +34,31 @@ const renderStars = (rating) => {
 
 const Productdisplay = ({ product }) => {
     const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mainImage, setMainImage] = useState(product.images?.[0] || product.image);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false); // State to prevent double clicks
-    const [feedbacks, setFeedbacks] = useState([]); // State to store feedback data
-    const [averageRating, setAverageRating] = useState(0); // State for average rating
-    const [totalRatings, setTotalRatings] = useState(0); // State for total ratings
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [feedbacks, setFeedbacks] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
+    const [totalRatings, setTotalRatings] = useState(0);
+    const [showMagnifier, setShowMagnifier] = useState(false);
+    const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+    const [magnifierOffset, setMagnifierOffset] = useState({ x: 0, y: 0 });
+
     const { addToCart } = useContext(Context);
     const navigate = useNavigate();
 
+    // Get all images including the main image
+    const allImages = product.images?.length > 0 ? product.images : [product.image];
+
+    useEffect(() => {
+        setMainImage(allImages[currentImageIndex]);
+    }, [currentImageIndex, allImages]);
+
     useEffect(() => {
         setMainImage(product.images?.[0] || product.image);
+        setCurrentImageIndex(0);
     }, [product]);
 
     // Fetch feedbacks from the backend
@@ -55,9 +68,8 @@ const Productdisplay = ({ product }) => {
                 const response = await fetch(`${baseurl}/feedback/${product.id}`);
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Error fetching feedback');
-                setFeedbacks(data.feedbacks); // Assuming data has 'feedbacks' array
+                setFeedbacks(data.feedbacks);
 
-                // Calculate average rating and total ratings
                 const total = data.feedbacks.length;
                 const sum = data.feedbacks.reduce((acc, feedback) => acc + feedback.rating, 0);
                 setAverageRating(total > 0 ? (sum / total).toFixed(1) : 0);
@@ -68,84 +80,157 @@ const Productdisplay = ({ product }) => {
         };
 
         fetchFeedbacks();
-    }, [product.id]);
+    }, [product.id, baseurl]);
+
+    // Image navigation handlers
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? allImages.length - 1 : prevIndex - 1
+        );
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === allImages.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    // Magnifier handlers
+    const handleMouseEnter = () => {
+        setShowMagnifier(true);
+    };
+
+    const handleMouseLeave = () => {
+        setShowMagnifier(false);
+    };
+
+    const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const offsetX = (x / rect.width) * 100;
+    const offsetY = (y / rect.height) * 100;
+
+    setMagnifierOffset({ x: offsetX, y: offsetY });
+};
+
 
     const handleAddToCart = useCallback(() => {
         if (isProcessing) return;
         setIsProcessing(true);
 
-        // Check if sizes or colors are required
         if ((product.sizes?.length > 0 && !selectedSize) || (product.colors?.length > 0 && !selectedColor)) {
             alert("Please select both a size and a color.");
             setIsProcessing(false);
             return;
         }
 
-        // If no size or color selected, use "none"
         const colorToSend = selectedColor || "none";
         const sizeToSend = selectedSize || "none";
 
-        // Add to cart with selected color and size, or "none"
         addToCart(product.id, colorToSend, sizeToSend);
 
         setTimeout(() => {
-            setIsProcessing(false); // Reset after processing
-        }, 300); // Adjust timeout if necessary
+            setIsProcessing(false);
+        }, 300);
     }, [product.id, selectedColor, selectedSize, isProcessing, addToCart]);
 
     const handleBuyNow = useCallback(() => {
         if (isProcessing) return;
         setIsProcessing(true);
 
-        // Check if sizes or colors are required
         if ((product.sizes?.length > 0 && !selectedSize) || (product.colors?.length > 0 && !selectedColor)) {
             alert("Please select both a size and a color.");
             setIsProcessing(false);
             return;
         }
 
-        // If no size or color selected, use "none"
         const colorToSend = selectedColor || "none";
         const sizeToSend = selectedSize || "none";
 
-        // Add to cart and navigate to checkout
         addToCart(product.id, colorToSend, sizeToSend);
         navigate('/cart/checkout');
 
         setTimeout(() => {
-            setIsProcessing(false); // Reset after processing
-        }, 300); // Adjust timeout if necessary
+            setIsProcessing(false);
+        }, 300);
     }, [product.id, selectedColor, selectedSize, isProcessing, addToCart, navigate]);
 
-    const handleImageClick = (image) => {
+    const handleImageClick = (image, index) => {
+        setCurrentImageIndex(index);
         setMainImage(image);
     };
 
     const currencySymbol = getCurrencySymbol(product.countryCode);
-
-    // Determine if product is out of stock
     const isProductOutOfStock = product.available;
-    
 
     return (
         <>
             <div className="product-display">
                 <div className="product-display__left">
-                    <div className="product-display__main-img">
-                        <img src={mainImage} alt={product.name} />
+                    <div className="product-display__main-img-container">
+                        {/* Navigation Arrows */}
+                        {allImages.length > 1 && (
+                            <>
+                                <button
+                                    className="product-display__arrow product-display__arrow--left"
+                                    onClick={handlePrevImage}
+                                    aria-label="Previous image"
+                                >
+                                    <FaChevronLeft />
+                                </button>
+                                <button
+                                    className="product-display__arrow product-display__arrow--right"
+                                    onClick={handleNextImage}
+                                    aria-label="Next image"
+                                >
+                                    <FaChevronRight />
+                                </button>
+                            </>
+                        )}
+
+                        {/* Main Image with Magnifier */}
+                        <div
+                            className="product-display__main-img"
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            onMouseMove={handleMouseMove}
+                        >
+                            <img src={mainImage} alt={product.name} />
+                        </div>
+
+                        {/* Magnifier */}
+                        {showMagnifier && (
+                            <div
+                                className="product-display__magnifier"
+                                style={{
+                                    left: magnifierPosition.x,
+                                    top: magnifierPosition.y,
+                                    backgroundImage: `url('${mainImage}')`,
+                                    backgroundPosition: `${magnifierOffset.x}% ${magnifierOffset.y}%`,
+                                    backgroundSize: '400%',
+                                    backgroundRepeat: 'no-repeat'
+                                }}
+                            />
+                        )}
                     </div>
+
+                    {/* Thumbnail Images */}
                     <div className="product-display__image-list">
-                        {product.images?.map((img, index) => (
+                        {allImages.map((img, index) => (
                             <img
-                                key={img}
+                                key={`${img}-${index}`}
                                 src={img}
                                 alt={`Product thumbnail ${index + 1}`}
-                                onClick={() => handleImageClick(img)}
+                                className={currentImageIndex === index ? 'active' : ''}
+                                onClick={() => handleImageClick(img, index)}
                                 style={{ cursor: 'pointer' }}
                             />
                         ))}
                     </div>
                 </div>
+
                 <div className="product-display__right">
                     <h1>{product.name}</h1>
                     <div className="product-display__prices">
@@ -158,8 +243,8 @@ const Productdisplay = ({ product }) => {
                     {/* Display average rating stars */}
                     {averageRating > 0 && (
                         <div className="product-display__rating">
-                            {renderStars(averageRating)} {/* Call the function to render stars */}
-                            <span>({totalRatings})</span> {/* Display the number of ratings */}
+                            {renderStars(averageRating)}
+                            <span>({totalRatings})</span>
                         </div>
                     )}
 
@@ -168,19 +253,28 @@ const Productdisplay = ({ product }) => {
                         <div className="product-display__size-selection">
                             <h4>Select Size</h4>
                             <div className="sizes">
-                                {product.sizes.map((size) => (
-                                    <div
-                                        key={size._id}
-                                        className={`size-option ${selectedSize === size.size ? 'selected' : ''}`}
-                                        onClick={() => size.available && setSelectedSize(size.size)}
-                                        style={{ opacity: size.available ? 1 : 0.5, cursor: size.available ? 'pointer' : 'not-allowed' }}
-                                    >
-                                        {size.size}
-                                    </div>
-                                ))}
+                                {product.sizes.flatMap((sizeObj) =>
+                                    sizeObj.size.split(',').map((sizeValue, index) => {
+                                        const trimmedSize = sizeValue.trim();
+                                        return (
+                                            <div
+                                                key={`${sizeObj._id}-${index}`}
+                                                className={`size-option ${selectedSize === trimmedSize ? 'selected' : ''}`}
+                                                onClick={() => sizeObj.available && setSelectedSize(trimmedSize)}
+                                                style={{
+                                                    opacity: sizeObj.available ? 1 : 0.5,
+                                                    cursor: sizeObj.available ? 'pointer' : 'not-allowed'
+                                                }}
+                                            >
+                                                {trimmedSize}
+                                            </div>
+                                        );
+                                    })
+                                )}
                             </div>
                         </div>
                     )}
+
 
                     {/* Color Selection */}
                     {product.colors?.length > 0 && (
@@ -235,7 +329,8 @@ Productdisplay.propTypes = {
         category: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         countryCode: PropTypes.string.isRequired,
-        rating: PropTypes.number, // Assuming the product has a rating field
+        rating: PropTypes.number,
+        available: PropTypes.bool,
     }).isRequired,
 };
 
