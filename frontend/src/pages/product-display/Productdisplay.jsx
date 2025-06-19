@@ -45,6 +45,9 @@ const Productdisplay = ({ product }) => {
     const [showMagnifier, setShowMagnifier] = useState(false);
     const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
     const [magnifierOffset, setMagnifierOffset] = useState({ x: 0, y: 0 });
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
+    const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
 
     const { addToCart } = useContext(Context);
     const navigate = useNavigate();
@@ -105,16 +108,44 @@ const Productdisplay = ({ product }) => {
     };
 
     const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-    const offsetX = (x / rect.width) * 100;
-    const offsetY = (y / rect.height) * 100;
+        const offsetX = (x / rect.width) * 100;
+        const offsetY = (y / rect.height) * 100;
 
-    setMagnifierOffset({ x: offsetX, y: offsetY });
-};
+        setMagnifierOffset({ x: offsetX, y: offsetY });
+    };
 
+    // Zoom and pan handlers for mobile
+    const handleImageClickMobile = () => {
+        setIsZoomed(!isZoomed);
+        setPanPosition({ x: 0, y: 0 }); // Reset pan position when toggling zoom
+    };
+
+    const handleTouchStart = (e) => {
+        if (isZoomed) {
+            const touch = e.touches[0];
+            setTouchStart({ x: touch.clientX, y: touch.clientY });
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        if (isZoomed) {
+            e.preventDefault(); // Prevent scrolling
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - touchStart.x;
+            const deltaY = touch.clientY - touchStart.y;
+
+            // Update pan position with boundaries
+            setPanPosition((prev) => ({
+                x: Math.max(Math.min(prev.x + deltaX, 150), -150), // Limit panning
+                y: Math.max(Math.min(prev.y + deltaY, 150), -150),
+            }));
+            setTouchStart({ x: touch.clientX, y: touch.clientY });
+        }
+    };
 
     const handleAddToCart = useCallback(() => {
         if (isProcessing) return;
@@ -190,14 +221,24 @@ const Productdisplay = ({ product }) => {
                             </>
                         )}
 
-                        {/* Main Image with Magnifier */}
+                        {/* Main Image with Magnifier and Zoom */}
                         <div
-                            className="product-display__main-img"
+                            className={`product-display__main-img ${isZoomed ? 'zoomed' : ''}`}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                             onMouseMove={handleMouseMove}
+                            onClick={handleImageClickMobile}
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
                         >
-                            <img src={mainImage} alt={product.name} />
+                            <img
+                                src={mainImage}
+                                alt={product.name}
+                                style={{
+                                    transform: isZoomed ? `scale(2) translate(${panPosition.x}px, ${panPosition.y}px)` : 'none',
+                                    transition: isZoomed ? 'none' : 'transform 0.2s ease',
+                                }}
+                            />
                         </div>
 
                         {/* Magnifier */}
@@ -274,7 +315,6 @@ const Productdisplay = ({ product }) => {
                             </div>
                         </div>
                     )}
-
 
                     {/* Color Selection */}
                     {product.colors?.length > 0 && (
