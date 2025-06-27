@@ -4,6 +4,7 @@ import Orderdetails from '../orderdetails/Orderdetails';
 import { LuPencilLine } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Context } from '../../context API/Contextapi';
+import Adminloader from '../adminloader/Adminloader';
 
 const AdminOrders = () => {
     const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
@@ -105,12 +106,15 @@ const AdminOrders = () => {
         }
     };
 
+    if(loading){
+        return (
+            <Adminloader/>
+        )
+    }
+
     return (
         <div className="admin-orders-container">
             <h2 className="admin-orders-title">Order Management</h2>
-            {loading && <p>Loading orders...</p>}
-            {error && <p className="error-message">{error}</p>}
-            {deleting && <p>Deleting order...</p>}
             <table className="admin-orders-table">
                 <thead>
                     <tr>

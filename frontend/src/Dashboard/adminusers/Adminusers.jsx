@@ -5,6 +5,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiTickOutline } from "react-icons/ti";
 import { BiX } from "react-icons/bi";
 import { Context } from '../../context API/Contextapi';
+import Adminloader from '../adminloader/Adminloader';
 
 const AdminUsers = () => {
     const baseurl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
@@ -148,7 +149,7 @@ const AdminUsers = () => {
 
     // Render loading state or error state if applicable
     if (loading) {
-        return <div>Loading users...</div>;
+        return <Adminloader/>;
     }
 
     if (error) {
