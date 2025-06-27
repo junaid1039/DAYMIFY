@@ -45,7 +45,7 @@
 .products{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    place-items: center;
+    place-items: start;
     margin: 4em 0;
     gap: 5%;
 }
