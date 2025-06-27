@@ -23,13 +23,17 @@ const AdminOrders = () => {
         setError(null);
         try {
             const ordersData = await fetchOrders();
-            setOrders(ordersData);
+            const sortedOrders = ordersData.sort(
+                (a, b) => new Date(b.dateOrdered) - new Date(a.dateOrdered)
+            );
+            setOrders(sortedOrders);
         } catch (err) {
             setError(err.message);
         } finally {
             setLoading(false);
         }
     }, [fetchOrders]);
+
 
     useEffect(() => {
         loadOrders();
@@ -106,9 +110,9 @@ const AdminOrders = () => {
         }
     };
 
-    if(loading){
+    if (loading) {
         return (
-            <Adminloader/>
+            <Adminloader />
         )
     }
 
