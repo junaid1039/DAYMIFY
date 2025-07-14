@@ -1,12 +1,31 @@
-.nav{
+.nav {
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f1f6ebcf;
+    overflow: hidden;
+    white-space: nowrap;
 }
-.nav h5{
+
+.nav h5 {
     margin: 0.2em;
     font-weight: 400;
     font-size: 0.8em;
+}
+
+@media (max-width: 768px) {
+    .nav h5 {
+        display: inline-block;
+        animation: scrollText 15s linear infinite;
+    }
+}
+
+@keyframes scrollText {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
